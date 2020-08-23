@@ -27,6 +27,35 @@ Please also check the web platform here : https://tal.lipn.univ-paris13.fr/neove
 
 ### IATE database
 
+IATE (‘Interactive Terminology for Europe’) is the EU's terminology database. It has been used in the EU institutions and agencies since summer 2004 for the collection, dissemination and management of EU-specific terminology.
+
+They maintain a covid-19 terminology and freely provide snapshots of it : https://data.europa.eu/euodp/en/data/dataset/covid-19-multilingual-terminology-on-iate.
+We use the 28 July 2020 version (458 entries).
+
+IATE terminology is composed of two main description layers: 
+- concepts layer (Language-independent Level) : this is the main layer, identifying the concept id and : its domain(s) from the EuroVoc thesaurus and an indication of conceptual relations to other concepts (cross-references);
+- lexicalizations layer organized by language (Language-dependent Level and term level) : language code, definition of the concept in the given language, list of lexicalizations (terms in IATE parlance) with their type (term, abbrev, phrase, formula, short form, lookup form), reference contexts.
+
+Please see complete description here (chapter 4) : https://iate.europa.eu/assets/IATE_Handbook_public.pdf
+
+We do not use all available information for every covid-19-related concepts, but only the following (we give an example for the concept *3589305* lexicalized in English as *COVID-19 pandemic*, see https://iate.europa.eu/entry/result/3589305) :
+
+Layer | Feature | Explanation | Example
+------------ | ------------- | ------------- | -------------
+Concepts| id | the concept id | 3589305
+Concepts| domain | the concept domain(s) in the EuroVoc thesaurus | epidemic [ SOCIAL QUESTIONS > health > illness ]
+Concepts| relations | the relations of this concept to other concepts (cross-references) | is narrower than: 36453 pandemic, is successor of: 3589181 COVID-19 outbreak
+|||
+Lexical Units | value | the lexeme itself | global coronavirus outbreak
+Lexical Units | language | the language of the lexeme | en
+Lexical Units | type | the type of the lexeme | term
+Lexical Units | concept_id | the concept id | 3589305
+Lexical Units | context and context reference | a (reference?) context and its references | I’m handing over to the team in Australia now. Thanks so much for joining me. Here are the developments in the global coronavirus outbreak this evening (Nicola Slawson, 'Record rise in Italy Covid-19 death toll, Irish PM says stay home for two weeks – as it happened' (30.3.2020), The Guardian.)
+
+Please note that :
+- we take the English definition of the concepts to make them more clearer.
+- we merge the language-dependent level and the term level, as this distinction is not useful for the present research.
+
 ### JSI Timestamped web corpora
 
 ### Neoveille Data Editing and Exploration Platform
