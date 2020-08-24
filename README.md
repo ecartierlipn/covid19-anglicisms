@@ -56,16 +56,25 @@ Please note that :
 - we take the English definition of the concepts to make them more clearer.
 - we merge the language-dependent level and the term level, as this distinction is not useful for the present research.
 
+Please see ```backend/data/sql/readme.md``` for description of the sql model of the IATE covid-19 data.
+
 ### JSI Timestamped web corpora
+
+Please see https://www.sketchengine.eu/jozef-stefan-institute-newsfeed-corpus/ for description of these corpora. 
 
 ### Neoveille Data Editing and Exploration Platform
 
 The Néoveille Plaform has been tuned to handle all the data :
 - lexical entries : all entries of the IATE database can be browsed and edited;
-- contexts : contexts from the JSI corpora have been downloaded from the SketchEngine API and stored into an Apache Solr collection; additional contexts can be added. A multifeature visual Exploration can be done on this data.
+- contexts : contexts from the JSI corpora have been downloaded from the SketchEngine API and stored into an Apache Solr collection; additional contexts can be added. A multifeature Visual Exploration can be done on this data.
 
 ## Contributors
 
 
 ## Acknowledgements
 
+IATE
+
+JSI Timestamped corpora
+
+SketchEngine
