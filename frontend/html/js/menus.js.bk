@@ -1,0 +1,187 @@
+
+
+// ********************** listes
+
+
+$('#neo-cand2').click(function()
+{
+					//alert($("#container-fluid").html());
+					$( "li.active" ).attr( "class", "inactive" );
+					$( this ).closest( "li" ).attr( "class", "active" );
+        	    	$("#container-fluid").load("table/datatable-neo-candform.php",function(responseTxt, statusTxt, xhr)
+        	    	{
+        			//if(statusTxt == "success")
+            			//alert("External content loaded successfully!");
+        			if(statusTxt == "error")
+            			alert("Error: " + xhr.status + ": " + xhr.statusText);
+    				});
+});
+
+
+$('#neo-dglf').click(function()
+{
+					//alert($("#container-fluid").html());
+					$( "li.active" ).attr( "class", "inactive" );
+					$( this ).closest( "li" ).attr( "class", "active" );
+        	    	$("#container-fluid").load("table/datatable-neo-dglf.php",function(responseTxt, statusTxt, xhr)
+        	    	{
+        			//if(statusTxt == "success")
+            			//alert("External content loaded successfully!");
+        			if(statusTxt == "error")
+            			alert("Error: " + xhr.status + ": " + xhr.statusText);
+    				});
+});
+
+
+$('#neo-termesfem').click(function()
+{
+					//alert($("#container-fluid").html());
+					$( "li.active" ).attr( "class", "inactive" );
+					$( this ).closest( "li" ).attr( "class", "active" );
+        	    	$("#container-fluid").load("table/datatable-neo-termesfem.php",function(responseTxt, statusTxt, xhr)
+        	    	{
+        			//if(statusTxt == "success")
+            			//alert("External content loaded successfully!");
+        			if(statusTxt == "error")
+            			alert("Error: " + xhr.status + ": " + xhr.statusText);
+    				});
+});
+
+
+/**
+$('#neo-cand-type').click(function()
+{
+					//alert($("#container-fluid").html());
+					$( "li.active" ).attr( "class", "inactive" );
+					$( this ).closest( "li" ).attr( "class", "active" );
+        	    	$("#container-fluid").load("table/datatable-neo-candform-type.php",function(responseTxt, statusTxt, xhr)
+        	    	{
+        			//if(statusTxt == "success")
+            			//alert("External content loaded successfully!");
+        			if(statusTxt == "error")
+            			alert("Error: " + xhr.status + ": " + xhr.statusText);
+    				});
+}); **/
+
+
+/// base description neologismes
+$('#neo-db-dev').click(function()
+{
+					//alert($("#container-fluid").html());
+					$( "li.active" ).attr( "class", "inactive" );
+					$( this ).closest( "li" ).attr( "class", "active" );
+        	    	$("#container-fluid").load("table/datatable-neo-db.php",function(responseTxt, statusTxt, xhr)
+        	    	{
+        			//if(statusTxt == "success")
+            			//alert("External content loaded successfully!");
+        			if(statusTxt == "error")
+            			alert("Error: " + xhr.status + ": " + xhr.statusText);
+    				});
+});
+
+$('#neo-db-param').click(function()
+{
+					//alert($("#container-fluid").html());
+					$( "li.active" ).attr( "class", "inactive" );
+					$( this ).closest( "li" ).attr( "class", "active" );
+        	    	$("#container-fluid").load("table/datatable-neo-db-params.php",function(responseTxt, statusTxt, xhr)
+        	    	{
+        			//if(statusTxt == "success")
+            			//alert("External content loaded successfully!");
+        			if(statusTxt == "error")
+            			alert("Error: " + xhr.status + ": " + xhr.statusText);
+    				});
+});
+
+$('#neo-db-dev2').click(function()
+{
+                                        //alert($("#container-fluid").html());
+                                        $( "li.active" ).attr( "class", "inactive" );
+                                        $( this ).closest( "li" ).attr( "class", "active" );
+                        $("#container-fluid").load("table/datatable-neo-db-synth.php",function(responseTxt, statusTxt, xhr)
+                        {
+                                //if(statusTxt == "success")
+                                //alert("External content loaded successfully!");
+                                if(statusTxt == "error")
+                                alert("Error: " + xhr.status + ": " + xhr.statusText);
+                                });
+});
+
+
+// search
+$('#neo-search2').click(function()
+{
+					//alert($("#container-fluid").html());
+					$( "li.active" ).attr( "class", "inactive" );
+					$( this ).closest( "li" ).attr( "class", "active" );
+        	    	$("#container-fluid").load("table/datatable-search.php",function(responseTxt, statusTxt, xhr)
+        	    	{
+        			//if(statusTxt == "success")
+            			//alert("External content loaded successfully!");
+        			if(statusTxt == "error")
+            			alert("Error: " + xhr.status + ": " + xhr.statusText);
+    				});
+});
+
+
+    
+// outils
+$('#neo-tools1').click(function()
+{
+					//alert($("#container-fluid").html());
+					$( "li.active" ).attr( "class", "inactive" );
+					$( this ).closest( "li" ).attr( "class", "active" );
+        	    	$("#container-fluid").load("table/datatable-tools1.php",function(responseTxt, statusTxt, xhr)
+        	    	{
+        			//if(statusTxt == "success")
+            			//alert("External content loaded successfully!");
+        			if(statusTxt == "error")
+            			alert("Error: " + xhr.status + ": " + xhr.statusText);
+    				});
+});
+
+
+// user management
+// user profile
+$('#user-profile').click(function()
+{
+					//alert($("#container-fluid").html());
+					$( "li.active" ).attr( "class", "inactive" );
+					$( this ).closest( "li" ).attr( "class", "active" );
+        	    	$("#container-fluid").load("table/datatable-user-profile.php",function(responseTxt, statusTxt, xhr)
+        	    	{
+        			//if(statusTxt == "success")
+            			//alert("External content loaded successfully!");
+        			if(statusTxt == "error")
+            			alert("Error: " + xhr.status + ": " + xhr.statusText);
+    				});
+});
+// user preferences
+$('#user-preferences').click(function()
+{
+					//alert($("#container-fluid").html());
+					$( "li.active" ).attr( "class", "inactive" );
+					$( this ).closest( "li" ).attr( "class", "active" );
+        	    	$("#container-fluid").load("table/datatable-user-profile.php",function(responseTxt, statusTxt, xhr)
+        	    	{
+        			//if(statusTxt == "success")
+            			//alert("External content loaded successfully!");
+        			if(statusTxt == "error")
+            			alert("Error: " + xhr.status + ": " + xhr.statusText);
+    				});
+});
+
+// users management
+$('#users-list').click(function()
+{
+					//alert($("#container-fluid").html());
+					$( "li.active" ).attr( "class", "inactive" );
+					$( this ).closest( "li" ).attr( "class", "active" );
+        	    	$("#container-fluid").load("table/datatable-users-management.php",function(responseTxt, statusTxt, xhr)
+        	    	{
+        			//if(statusTxt == "success")
+            			//alert("External content loaded successfully!");
+        			if(statusTxt == "error")
+            			alert("Error: " + xhr.status + ": " + xhr.statusText);
+    				});
+});

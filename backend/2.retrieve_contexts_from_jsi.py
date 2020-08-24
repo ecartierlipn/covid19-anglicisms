@@ -40,15 +40,6 @@ USERNAME = 'ecartierlipn' #'api_testing'
 API_KEY = 'a48ad457b27f47d8a639332d4b91576f'#'YNSC0B9OXN57XB48T9HWUFFLPY4TZ6OE'
 base_url = 'https://api.sketchengine.eu/bonito/run.cgi'
 
-# mysql credentials
-host='localhost'
-database='phc'
-user='root',
-password='neoveille',
-charset='utf8',
-collation='utf8_general_ci',
-autocommit=True
-
 
 
 
@@ -101,7 +92,6 @@ params_freq = {
 # 'q': dynamic value
  #'pagesize':10000,
 }
-# &format=json&async=0&fcrit=word/0
 
 params_wsketch = {
     #'lemma': item,
@@ -460,7 +450,7 @@ def insert_words_into_db(words):
 
 # main
 # parameters
-# corpus generation pattern for all languages:
+# corpus name generation pattern for all languages:
 #'ces' exists but is buggy
 # <lang>_jsi_newsfeed_<virt|lastmonth|curmonth>
 langs = {'cs':False,'da':False,'de':'deu','en':'eng','es':'spa','fi':'fin','fr':'fra','it':'ita','nl':'nld','is':False,'no':False,'pt':'por'}
@@ -482,6 +472,8 @@ conn.close()
 
 langs2 = [lang for lang in langs.keys() if not(langs[lang]==False) ]
 print(langs2)
+
+# generate wordlist from iate db to requests JSI contexts
 wordlist={}
 for (lang, value, query) in res:
     if lang in langs2:
@@ -495,22 +487,19 @@ for lang in wordlist:
     print(lang, ' : ' , len(wordlist[lang]))
     #print(wordlist[lang])
 
-#wordlist = ['corona','covid']
+# name of series
 series = 'covid_19'
 
-
-#exit()
-
-# check of subdirectories exist and create them if not
-dir_wordlist = './res_wordlist/'
-dir_wordlist_final = './res_wordlist/'
+# check of output subdirectories exist and create them if not
+#dir_wordlist = './res_wordlist/'
+#dir_wordlist_final = './res_wordlist/'
 dir_contexts = './res_contexts/'
-os.makedirs(dir_wordlist, exist_ok=True)
-os.makedirs(dir_wordlist_final, exist_ok=True)
+#os.makedirs(dir_wordlist, exist_ok=True)
+#os.makedirs(dir_wordlist_final, exist_ok=True)
 os.makedirs(dir_contexts, exist_ok=True)
 
 
-# get corpus info
+# get corpus info (to get frequencies)
 if path.isfile("corpora.info.csv") == False:
     with open('corpora.info.csv', mode="w", encoding="utf-8") as fin:
         fin.write("rawname,name,corpusinfo,date_compiled,tagsetdoc,lang,tokencount,wordcount,doccount\n")
@@ -534,7 +523,7 @@ print(dfcorp.info())
 
 
 
-# combine word lists for inclusion into phc.borrowings_fred (mysql db) => "jsi.all.series.csv"
+# combine word lists for inclusion into phc.borrowings_freq (mysql db) => "jsi.all.series.csv"
 #combine_wordlist_results(series, dir_in = dir_wordlist,dir_out=dir_wordlist_final)
 
 #  save data to db (phc.borrowings_freq)
