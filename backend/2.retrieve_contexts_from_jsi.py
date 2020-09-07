@@ -35,9 +35,10 @@ currentDay = datetime.now().day
 currentMonth = datetime.now().month
 currentYear = datetime.now().year
 
+
 # sketchengine api
-USERNAME = 'ecartierlipn' #'api_testing'
-API_KEY = 'a48ad457b27f47d8a639332d4b91576f'#'YNSC0B9OXN57XB48T9HWUFFLPY4TZ6OE'
+USERNAME = 'your username' 
+API_KEY = 'your api key'
 base_url = 'https://api.sketchengine.eu/bonito/run.cgi'
 
 
