@@ -134,10 +134,10 @@ $( 'input.column_search').on( 'keyup click',function () {
 
 // Activate an inline edit on click of a table cell : not working with server side processing
 // tbd : not working see : https://editor.datatables.net/examples/inline-editing/serverSide.html
-   $('#exampleNeo').on( 'click', 'tbody td:not(:first-child)', function (e) {
+/*   $('#exampleNeo').on( 'click', 'tbody td:not(:first-child)', function (e) {
    		//console.log(tableNeo.cell(this).index());
         editorNeo.inline(this, {onBlur: 'submit'} );
-    } );
+    } );*/
 
 // table    
 var tableNeo = $('#exampleNeo').DataTable( {
@@ -188,9 +188,9 @@ var tableNeo = $('#exampleNeo').DataTable( {
             	    orderable:      false,
                 	data:           null,
                 	defaultContent: '',
-                	render : function(){ return '<i title="Voir le profil combinatoire de la lexie dans le corpus JSI" class="fa fa-book fa-lg" aria-hidden="true" style="color:#1525A8;cursor: pointer;"></i>';}
+                	render : function(){ return '<i title="See the behavioral profile in JSI timestamped web corpora" class="fa fa-book fa-lg" aria-hidden="true" style="color:#1525A8;cursor: pointer;"></i>';}
             	},
-				{
+				/*{
 					// neoveille search
         	        className:      'details-control1',
             	    orderable:      false,
@@ -198,14 +198,14 @@ var tableNeo = $('#exampleNeo').DataTable( {
                 	defaultContent: '',
                 	render: function(){return '<i title="Rechercher des occurrences dans Néoveille" class="fa fa-search-plus fa-lg" aria-hidden="true" style="color:#1525A8;cursor: pointer;"></i>';}
 
-            	},
+            	},*/
 				{
-					// sketchengine search (in db)
-        	        className:      'details-control2',
+					// sketchengine search (in db) details-control2
+        	        className:      'details-corpus',
             	    orderable:      false,
                 	data:           null,
                 	defaultContent: '',
-                	render: function(){return '<i title="Rechercher et analyse des contextes du JSI" class="fa fa-bar-chart fa-lg" aria-hidden="true" style="color:#1525A8;cursor: pointer;"></i>';}
+                	render: function(){return '<i title="Search in JSI corpora and analyze" class="fa fa-bar-chart fa-lg" aria-hidden="true" style="color:#1525A8;cursor: pointer;"></i>';}
             	},
 				{
 					// google search
@@ -213,7 +213,7 @@ var tableNeo = $('#exampleNeo').DataTable( {
                 	orderable:      false,
                 	data:           null,
                 	defaultContent: '',
-                	render: function(){return '<image title="Rechercher et analyse dans Google" src="images/google2.png" style="cursor:pointer;"/>';}
+                	render: function(){return '<image title="Search in Google" src="images/google2.png" style="cursor:pointer;"/>';}
             	},
 				{
 					// babelnet search
@@ -221,7 +221,7 @@ var tableNeo = $('#exampleNeo').DataTable( {
                 	orderable:      false,
                 	data:           null,
                 	defaultContent: '',
-                	render: function(){return '<image title="Rechercher et analyse dans BabelNet" src="images/babelnet.png" style="cursor:pointer;"/>';}
+                	render: function(){return '<image title="Search in BabelNet" src="images/babelnet.png" style="cursor:pointer;"/>';}
             	}
 		],
 		select: {
@@ -229,250 +229,55 @@ var tableNeo = $('#exampleNeo').DataTable( {
             selector: 'td:first-child'
         },
 		buttons: [
-            { extend: 'colvis', text : "Affichage", editor:editorNeo},
 			{ extend: "create", editor: editorNeo },
-			{ extend: "edit",   editor: editorNeo },
-			{ extend: "remove", editor: editorNeo },
-//            		{ extend: 'colvis', text : "Colonnes"},
-            {
-                extend: 'collection',
-                text: 'Exporter',
+			{ extend: "edit", editor: editorNeo },
+			{ extend: "remove",   editor: editorNeo },
+			{ extend: "colvis", editor: editorNeo, text:"Show/Hide Columns" , columns: ':lt(9)'},
+			{	extend: 'collection',
+                text: 'Export',
                 exportOptions : {
-            	rows : "{search:'applied'}"
-            	/*rows : function ( idx, data, node ) {
-            				console.log(user);
-            				return true;
-            				console.log(data);
-        					return data.auteur === user;
-//        					return data.auteur === user ? true : false;
-        				}*/
-        		}, 
+            	rows : "{search:'applied'}"},
                 buttons: [
                     'copy',
                     'excel',
                     'csv',
-                    { 
-                    	extend : 'pdfHtml5', 
-                    	orientation: 'landscape',
-                    	footer:true,
-                    	title : "Néoveille export results : www.neoveille.org",
-                   		customize: function ( doc ) {
-                   			var dt = new Date();
-							var utcDate = dt.toLocaleDateString();
-                   			doc.pageMargins = [ 40, 60, 40, 60 ];
-                    		doc.footer = function(currentPage, pageCount) { return {text : currentPage.toString() + ' / ' + pageCount, alignment : 'center'} };
-						    doc.header = function(currentPage, pageCount) {
-    							return { text: 'www.neoveille.org : ' +  utcDate, alignment: 'center' };
-    						};
-						}	
-                    },
+                    'pdf',
                     'print'
                 ]
             }
 			
 		]
+
 	} );
 
 //////////////////////////////////////////////////////////////////// EVENTS
 // Buttons events
 	
-// NEOVEILLE search of current word / language (with regexp)
-// triggering event 
-$('#exampleNeo tbody').on('click', 'td.details-control1', function () {
+
+// interactive visualization of retrieved contexts from JSI for given concept id
+$('#exampleNeo tbody').on('click', 'td.details-corpus', function () {
+		//console.log("JSI corpus search button");
 		var td = $(this);
         var tr = $(this).closest('tr');
         var row = tableNeo.row( tr );
-       // console.log(row.data())
- 
- //       if ( row.child.isShown() ) {
-        if ( td.children('i').hasClass('fa-search-minus') ) {
-            // This row is already open - close it
-           row.child.hide();
-            //tr.removeClass('shown');
-            td.empty().append('<i title="Rechercher des occurrences dans Néoveille" class="fa fa-search-plus fa-lg" aria-hidden="true" style="color:#1525A8;cursor: pointer;"></i>')
-
-        }
-        else {
-            //$.blockUI({ message: '<div class="card-body"><img src="./images/ajax-loader.gif" width="50" />Chargement en cours...</div>' }); 
-            // Open this row
-            formatajax(row.data(), function(data)
-            {
-	            //alert(data)
-    	        row.child(  data ).show();
-        	   // tr.addClass('shown');
-        	    //$.unblockUI();
-        	    td.empty().append('<i title="Rechercher des occurrences dans Néoveille" class="fa fa-search-minus fa-lg" aria-hidden="red" style="color:red;cursor: pointer;"></i>')
-
-            }
-            );
-        }
-    } );
-
-
-// get data and format it
-function formatajax(d,callback) 
-{
-		console.log("row : ", d);
-		//language_iso={"1":'fr',"2":'pl',"3":'cz'};
-		//if (d.language == undefined){editorNeo.lang='fr';}
-		lang = d.lexemes.lang;
-		word= d.lexemes.value
-		console.log(lang,word);
-		var restable='';
-		var langues = {'fr':"rss_french", 'pl':"RSS_polish", 'cz':'RSS_czech'};
-		var url = 'https://tal.lipn.univ-paris13.fr/solr/' + langues[lang] + '/select';
-        var request= $.ajax({
-        url :'https://tal.lipn.univ-paris13.fr/solr/' + langues[lang] + '/select',
-        data:{  q: '"'+word+'" & dateS:[2020-01-01 TO NOW]',
-        		rows:100,
-//        		fl:'contents,ttf(contents,"'+ d.termes_copy.terme + '")',
-        		//df:'contents',
-			sort:"score desc",
-			sort:"dateS desc",
-        		debug:"true",
-        		wt:"json",
-        		indent:"false",
-        		"hl":"true",
-        		"hl.fl":"*",
-        		"hl.simple.pre":'<span style="background-color: #FFFF00">',
-        		"hl.simple.post":"</span>"
-        		},
-        dataType: "jsonp",
-        jsonp:'json.wrf',
-        type:'GET',
-        success: function( result) {
-        	console.log(result);
-            data = result.highlighting;
-            meta = result.response;
-            docs = result.response.docs;
-            rawquery = result.debug.parsedquery_toString;
-            num = meta.numFound;
-	    	console.log(num);
-	    	
-            totalocc=0;
-            totaldoc=0;
-            if (num == 0){callback('<div class="alert alert-danger" role="alert">Aucun résultat pour cette requête (requête solr :[' + rawquery + '], requête initiale :[' + d.borrowings_description.word_lemma + ']).</div>' );return;}
-            var tbody = '';
-			for (var i= 0; i < docs.length; i++)
-           // for (key in docs) 
-            {
-            	doc = docs[i];
-            	//console.log("for key in docs");
-             	//console.log("doc : ", doc);
-             	//console.log("doc.contents : ", doc.contents[0]);
-             	console.log(rawquery);
-             	console.log(rawquery.substring(9));
-             	res = highlight_neo(doc.contents[0], word, rawquery.substring(9)); // .replace(/^.+\((.+?) .+$/,"$1")
-             	if (res[1] > 0){
-             		totaldoc = totaldoc + 1;
-             		totalocc = totalocc + res[1];
-             		if (doc.link==undefined){link = "Unknown"}else{var link = doc.link.substring(0,30);}
-             		if (doc.dateS==undefined){dateL = "Unknown";}else{var dateL = doc.dateS.substring(0,10);}
-                	tbody += '<tr><td>' + dateL + '</td><td><a title="Voir la source" href="' + doc.link + '" target="source">' + link+ '...</a></td><td>';
-             		tbody+=res[0];
-             	    tbody += '</td></tr>';
-             	}
-            }
-            var thead = '<div class="alert alert-success" role="alert">Total number of documents : ' + num + '. On ' + totaldoc + ' documents :' + totalocc + '. Néoveille Search Engine (' + url + ').  Extended request : "' + rawquery.substring(9).replace(/^.+\((.+?) .+$/,"$1") + '"</div><th>Date</th><th>Source (Lien)</th><th>Extrait</th>';
-            restable = '<table class="table table-bordered" width="100%">' + thead + tbody + '</table>';
-            callback(restable);
-    	},
-        error: function (request) {
-            alert("Error : " + request.status + ". Response : " +  request.statusText);
-            restable= '<div>Problème :'+ request.status + ". Response : " +  request.statusText + '</div>';
-            callback(restable)
-        }
-    });
-}
-// utility function to highlight keyword in contexts
-//res = highlight_neo(doc.contents[0], d.borrowings_description.word_lemma,rawquery.substring(9).replace(/^.+\((.+?) .+$/,"$1"));
-
-function highlight_neo(text, neo,rawquery){
-
-	rawquery =  rawquery.replace(/"/,'')
-	if (neo.indexOf('-')> -1){
-	  neo = neo.replace(/-/g,'.?');
-//	  rawquery = rawquery.replace(/^.+\((.+?) .+$/,"$1");
-	  rawquery = rawquery.replace(/-/g,'.');
-	  console.log(neo);
-	  console.log(rawquery);
-	}
-	if (neo.indexOf(' ')> -1){
-	  neo = neo.replace(/ /g,'.{1,30}');
-	  rawquery = rawquery.replace(/ /g,'.{1,30}');
-	  console.log(neo);
-	  console.log(rawquery);
-	}
-	var nbmatch = 0;
-	// with exact neo form
-	regexpstr = '(.{0,70})(\\b' + neo.toString() + ")(.{0,70})";
-	console.log(regexpstr);
-	var regexp = new RegExp( regexpstr, 'gi');
-	//console.log(text);
-	//console.log(typeof text);
-	//console.log(regexp);
-	//console.log(typeof regexp)
-	match = text.match(regexp);
-	var res = ''
-	// with rawquery
-	if (match == null){
-		regexpstr = '(.{0,70})(\\b' + rawquery.toString() + ")(.{0,70})";
-		console.log(regexpstr);
-		var regexp = new RegExp( regexpstr, 'gi');
-		//console.log(text);
-		//console.log(typeof text);
-		//console.log(regexp);
-		//console.log(typeof regexp)
-		while ((match = regexp.exec(text))!== null){
-			nbmatch = nbmatch + 1;
-			res = res + "<br/>..." + match[1] + "<span style='background-color: #ffa366'>" + match[2] + "</span>" + match[3] + "...";
-			//match = regexp.exec(text);
-		}	
-
-	}
-	else {
-		while ((match = regexp.exec(text))!= null){
-			nbmatch = nbmatch + 1;
-			res = res + "<br/>..." + match[1] + "<span style='background-color: #FFFF00'>" + match[2] + "</span>" + match[3] + "...";
-			//match = regexp.exec(text);
-		}	
-	}
-	console.log(res);
-	console.log(nbmatch);
-//	return res + "<br/>" + text;
-	return [res,nbmatch];
-}    
-
-
-//// END OF NEOVEILLE 
-
-//////////////  interactive visualization of data with contexts analyzed (in db)
-
-// JSI
-// interactive visualization of retrieved contexts from JSI for given word
-$('#exampleNeo tbody').on('click', 'td.details-control2', function () {
-		var td = $(this);
-        var tr = $(this).closest('tr');
-        var row = tableNeo.row( tr );
- 		if (editorNeo.lang == undefined){editorNeo.lang='fr';}
-
+		//console.log(row);
        if ( td.children('i').hasClass('close') ) {
             // This row is already open - close it
             row.child.hide();
-            td.empty().append('<i title="Rechercher et analyser les contextes du JSI" class="fa fa-bar-chart fa-lg open" aria-hidden="true" style="color:#1525A8;cursor: pointer;"></i>')
+            td.empty().append('<i title="Search in JSI corpora and analyze" class="fa fa-bar-chart fa-lg open" aria-hidden="true" style="color:#1525A8;cursor: pointer;"></i>')
 
         }
         else {
-            $.blockUI({ message: '<div class="card-body"><img src="./images/ajax-loader.gif" width="50" />Chargement en cours...</div>' }); 
             // Open this row
             console.log(row.data())
-            get_neo_info_mysqldata(editorNeo.lang, row.data(), function(data) // from mysql
+            $.blockUI(); 
+            get_neo_info_jsondata(row.data(), function(data, nb) // from mysql
             {
 	            //alert(data)
     	        data2 = '<div class="alert alert-info" id="jsi-word-info">' + data + '</div>'
     	        row.child(  data2 ).show();
             	if (data.startsWith('R')){
-        			$('#modal_view .modal-title').html("Exploration des données pour : " + row.data().borrowings_description.word_lemma);
+        			$('#modal_view .modal-title').html("<b>Data exploration for concept id</b> : " + row.data().lexemes.id_concept + '<br/><b>From source lexeme</b> : ' + row.data().lexemes.value + '<br/><b>Language</b> : ' + row.data().lexemes.lang);
 		        	$('#neoResultsfr #jsi-word-info').remove();
 		        	$('#neoResultsfr').prepend(data2);
 		        	$('#neoResultsfr').appendTo($('#modal_view .modal-body')); 
@@ -484,60 +289,113 @@ $('#exampleNeo tbody').on('click', 'td.details-control2', function () {
 				}
 
 
+        		td.empty().append('<i title="Search in JSI corpora and analyze" class="fa fa-bar-chart fa-lg close" aria-hidden="true" style="color:red;cursor: pointer;"></i>')
         		$.unblockUI();
-        		td.empty().append('<i title="Rechercher et analyser les contextes du JSI" class="fa fa-bar-chart fa-lg close" aria-hidden="true" style="color:red;cursor: pointer;"></i>')
             }
             );
         }
     } );
 
-/// interactive visualization of data with contexts analyzed (in db)
-// get info from mysql
-function get_neo_info_mysqldata(lang,neo,callback) 
+
+
+
+// get info from json data
+
+function get_neo_info_jsondata(neo,callback) 
 {
     	console.log(neo);
-    	word = neo.borrowings_description.word_lemma //.slice(0,-3) // "kind of" stemmatization
-    	word = word.replace(/[- ]/g,'.?')
+    	id_concept = neo.lexemes.id_concept
+    	lex_value = neo.lexemes.value.toLowerCase()
+    	console.log(id_concept);
+    	console.log(lex_value);
+		var url ="php/db_access_sqlite.php?action=concept_contexts&concept=" + id_concept;
+        var request= $.ajax({
+        	url :url,
+        	type: 'get',
+        	dataType: 'JSON',
+        	//async:false,
+        	success: function( data) {
+        		console.log("data : ")
+        		//console.log(data)
+        		console.log(data[0]);
+        		if ($.type(data) === "string"){
+            		callback(data, 0);
+            		return;
+        		}
+        		else {
+        			count = data.length;
+        			console.log(count);
+        			console.log(data[0]);
+        			var nb = data.filter(function(d) { return d.oov[0].toLowerCase() === lex_value; }).length
+            		message = "Result : <b>" + count.toString() + " contexts for this concept and " + nb.toString() + " occurrences of the lexeme</b> in the Timestamped JSI web corpus 2014-2019. You can download the json raw data here : <a href='./data/id_concept/" + id_concept + ".json' download target='_new'><i class='fa fa-download' aria-hidden='true'></i></a>";				
+					callback(message, nb);
+	            	build_neo_contexts_viz2(data,'fr');
+				}
+    		},
+        	error: function (request) {
+            	alert("Error : " + request.status + ". Response : " +  request.statusText);
+            	restable= '<div>Problem :'+ request.status + ". Response : " +  request.statusText + '</div>';
+            	callback(restable, 0)
+        	}
+    });
 
-		d3.json("./php/db_access.php?action=contextes&word="+word+"&word2="+neo.borrowings_description.word_lemma+"&morphem="+neo.borrowings_description.morphem, function(error, data) {
-        	//console.log(data);
-        	console.log(error);
-        	count = data.length;
-        	console.log(count);
-        	if (count == 0){
-        		res = '<div class="alert alert-danger" role="alert">Les contextes des corpus TimeStamped JSI n\'ont pas encore été chargées pour cette entrée. La récupération est maintenant programmée et sera disponible sous un jour.</div>';
-            	callback(res);
-            }
-            else{
-            	message = "Résultat : " + count.toString() + " contextes pour cette lexie dans le corpus Timestamped JSI web corpus 2014-2019. Requête étendue : " + word;				
-				callback(message);
-	            build_neo_contexts_viz2(data,lang);
-			}
-        	
-        });   
 }
 
+function build_neo_contexts_viz2(jsondata,lang){
 
-// main function to display interactive graphs
-function build_neo_contexts_viz2(jsondata, lang){
-
+console.log("result example");
+//console.log(get_contexts(jsondata[0]["pos-text"][0], query));
 console.log(jsondata[0]);
-//jsondata = jsondata.slice(0,100)
+//console.log(docshl);
 
-/********************* GET THE JSON DATA AND TRANSFORM WHEN NECESSARY ***********/
-  // format our data : dateS,source,link,subject,subject2, neologisms
-  
-  var langs = {'1':'fr','2':'pl','3':'cz'};
-  var dtgFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
-  
-  jsondata.forEach(function(d) { 
-  		//console.log(d);
-  		d.lang = langs[d.lang];
+ var dtgFormat = d3.time.format("%Y-%m-%dT%H:%M:%SZ");
+ 
+jsondata.forEach(function(d) { 
+  		//console.log(typeof d.oov);
     	d.dtg   = dtgFormat.parse(d.date);    	
-    	d.core = d.key_word + "/" + d.key_pos;    	
+    	d.oov = d.oov[0].replace(/_/g, ' ').toLowerCase(); 
+    	if (d.country=='United States'){d.country='USA';} 
+    	d.l1forme='';  	
+    	d.l2forme='';  	
+    	d.l3forme='';  	
+    	d.l4forme='';  	
+    	d.l5forme='';  	
+    	d.r1forme='';  	
+    	d.r2forme='';  	
+    	d.r3forme='';  	
+    	d.r4forme='';  	
+    	d.r5forme='';  	
+    	d.l1pos='';  	
+    	d.l2pos='';  	
+    	d.l3pos='';  	
+    	d.l4pos='';  	
+    	d.l5pos='';  	
+    	d.r1pos='';  	
+    	d.r2pos='';  	
+    	d.r3pos='';  	
+    	d.r4pos='';  	
+    	d.r5pos=''; 
+    	d.l1lemma='';  	
+    	d.l2lemma='';  	
+    	d.l3lemma='';  	
+    	d.l4lemma='';  	
+    	d.l5lemma='';  	
+    	d.r1lemma='';  	
+    	d.r2lemma='';  	
+    	d.r3lemma='';  	
+    	d.r4lemma='';  	
+    	d.r5lemma='';  	
+ 	
   });
+
+
+  
 console.log(jsondata[1]);
 console.log("Data Loaded");
+
+/*console.log(countries);
+console.log(subjects);
+console.log(sources);*/
 
 /*******************  GLOBAL DIMENSIONS ****************************/
   // Run the data through crossfilter and load our 'facts'
@@ -552,9 +410,9 @@ totalCount
         .dimension(facts)
         .group(all)  
         .html({
-            some: '<strong>%filter-count</strong> sélectionnés sur <strong>%total-count</strong> articles' +
-                ' | <a href=\'javascript:dc.filterAll(); dc.renderAll();\'>Réinitialiser</a>',
-            all: 'Tous les articles sélectionnés. Cliquez sur les graphes pour effectuer des filtres.'
+            some: '<strong>%filter-count</strong> selected on <strong>%total-count</strong> contexts' +
+                ' | <a href=\'javascript:dc.filterAll(); dc.renderAll();\'>Reset</a>',
+            all: 'All contexts selected. Please click on graphs to filter and interact.'
         });
   
 totalCount2 = dc.dataCount('.dc-data-count2'+lang);
@@ -562,18 +420,19 @@ totalCount2
         .dimension(facts)
         .group(all)  
         .html({
-            some: '<strong>%filter-count</strong> sélectionnés sur <strong>%total-count</strong> articles' +
-                ' | <a href=\'javascript:dc.filterAll(); dc.renderAll();\'>Réinitialiser</a>',
-            all: 'Tous les articles sélectionnés. Cliquez sur les graphes pour effectuer des filtres.'
+            some: '<strong>%filter-count</strong> selected on <strong>%total-count</strong> contexts' +
+                ' | <a href=\'javascript:dc.filterAll(); dc.renderAll();\'>Reset</a>',
+            all: 'All contexts selected. Please click on graphs to filter and interact.'
         });
   
+
   
 console.log("Count chart built"); 		   
 console.log(totalCount);
 /***************************** NEOPOS ROW BAR CHART ***********************/
-var neoChart = dc.rowChart("#dc-neo-chart"+lang);
-var neoDim = facts.dimension(function(d){ return d.core;});
-var neoGroup = neoDim.group().reduceCount(function(d) { return d.core; });
+var neoChart = dc.rowChart("#dc-neo-chartfr");
+var neoDim = facts.dimension(function(d){ return d.oov;});
+var neoGroup = neoDim.group().reduceCount(function(d) { return d.oov; });
 /// for top	
 function remove_empty_bins(source_group) {
     function non_zero_pred(d) {
@@ -626,7 +485,7 @@ console.log(neoChart);
 /***************************** SUBJECT PIE CHART ***********************/
 
 // Create the dc.js chart objects & link to div
-var subjectChart = dc.rowChart("#dc-subject-chart"+lang);
+var subjectChart = dc.rowChart("#dc-subject-chartfr");
 var subjectDimension = facts.dimension(function (d) { return d.lang; });
 var subjectGroup = subjectDimension.group();
 var subjectGroupTop = remove_empty_bins(subjectGroup);
@@ -655,13 +514,13 @@ console.log("Subject groups :" + subjectGroupTop.all());
 	    .xAxis() //.tickValues([0,1,5,10,20,30,40,50,100,1000,10000])
  	    ;
         
-console.log("Lang chart built");
+console.log("lang bar chart built");
 //console.log(subjectChart);
 
 
 /***************************** COUNTRY ROW BAR CHART ***********************/
 
-var countryChart = dc.rowChart("#dc-country-chart"+lang);
+var countryChart = dc.rowChart("#dc-country-chartfr");
 var countryDimension = facts.dimension(function (d) { return d.country; });
 var countryGroup = countryDimension.group().reduceCount(function (d) { return d.country; });
 var countryGroupTop = remove_empty_bins(countryGroup);
@@ -696,9 +555,9 @@ console.log("country chart built");
 
 /***************************** NEWSPAPER ROW BAR CHART ***********************/
 
-var newspaperChart = dc.rowChart("#dc-newspaper-chart"+lang);
-var newspaperDimension = facts.dimension(function (d) { return d.journal; });
-var newspaperGroup = newspaperDimension.group().reduceCount(function (d) { return d.journal; });
+var newspaperChart = dc.rowChart("#dc-newspaper-chartfr");
+var newspaperDimension = facts.dimension(function (d) { return d.source; });
+var newspaperGroup = newspaperDimension.group().reduceCount(function (d) { return d.source; });
 var newspaperGroupTop = remove_empty_bins(newspaperGroup);
 console.log("newspaper groups :" + newspaperGroupTop.all());
 
@@ -738,8 +597,8 @@ console.log("Newspapers chart built");
 
 // see http://dc-js.github.io/dc.js/docs/html/dc.lineChart.html
 // Create the dc.js chart objects & link to div
-var timeChart = dc.lineChart("#dc-time-chart"+lang);
-var periodChart = dc.barChart("#range-chart"+lang);
+var timeChart = dc.lineChart("#dc-time-chartfr");
+var periodChart = dc.barChart("#range-chartfr");
 
 // create timeline chart dimensions
 	var volumeByDay = facts.dimension(function(d) {
@@ -762,31 +621,33 @@ var periodChart = dc.barChart("#range-chart"+lang);
  	var maxDate = volumeByDay.top(1)[0].dtg;
 	console.log(String(minDate) + ":" + String(maxDate));
 
+	//width = $("#dc-time-chartfr").width()
+	//alert(width);
   // setup timeline graph
   timeChart
-  	//.width(700)
+  	//.width('100%')
    .height(250)
    .width($(window).width()-100)
-   //.width(window.innerWidth-10)
-
+   //.useViewBoxResizing(true)
     .margins({top: 10, right: 10, bottom: 30, left: 40})
     .dotRadius(5) //
     //.renderArea(true)
     .dimension(volumeByDay)
     .group(volumeByDayGroup)
     .transitionDuration(500)
-    //.mouseZoomable(true)    
+    .mouseZoomable(false)    
     .brushOn(false)
-    .renderDataPoints({radius: 5, fillOpacity: 0.8, strokeOpacity: 0.8})
+    .renderDataPoints({radius: 2, fillOpacity: 0.8, strokeOpacity: 0.8})
     .title(function(d){
       return dtgFormat(d.key)
       + "\nTotal : " + d.value;
       })
     .elasticY(true)
+    //.elasticX(true)
     .rangeChart(periodChart)
     .xUnits(d3.time.day)
     //.curve(d3.curveBasisOpen) //d3 > 3
-    .interpolate('basis') // 'linear', 'linear-closed', 'step', 'step-before', 'step-after', 'basis', 
+    .interpolate('linear') // 'linear', 'linear-closed', 'step', 'step-before', 'step-after', 'basis', 
     //'basis-open', 'basis-closed', 'bundle', 'cardinal', 'cardinal-open', 'cardinal-closed', and 'monotone'.
     .renderHorizontalGridLines(true)    
     .x(d3.time.scale().domain([minDate, maxDate]))
@@ -799,8 +660,10 @@ var periodChart = dc.barChart("#range-chart"+lang);
   
 /******************  range chart **************/
 periodChart /* dc.barChart('#monthly-volume-chart', 'chartGroup'); */
+        //.width('100%')
         .height(100)
         .width($(window).width()-100)
+        //.useViewBoxResizing(true)
         .margins({top: 0, right: 0, bottom: 20, left: 40})
 	    .dimension(volumeByDay)
     	.group(volumeByDayGroup)
@@ -814,8 +677,8 @@ periodChart /* dc.barChart('#monthly-volume-chart', 'chartGroup'); */
 
 /********************* composite chart by lemme/pos ***********/
 // Composite chart
-var compositeChart = dc.compositeChart("#dc-comptime-chart"+lang);
-var periodChart2 = dc.barChart("#range-chart2"+lang);
+var compositeChart = dc.compositeChart("#dc-comptime-chartfr");
+var periodChart2 = dc.barChart("#range-chart2fr");
 
 var volumeByDaycoreGroupTmp = volumeByMonth.group().reduce(
     function reduceAdd(p, v) { // add
@@ -823,11 +686,11 @@ var volumeByDaycoreGroupTmp = volumeByMonth.group().reduce(
     	//console.log(p);
     	//console.log("reduceAdd : v : ");
     	//console.log(v);
-        p[v.core] = (p[v.core] || 0) + 1; //for sum : v.value
+        p[v.oov] = (p[v.oov] || 0) + 1; //for sum : v.value
         return p;
     },
     function reduceRemove(p, v) { // remove
-        p[v.core] -= 1; // for sum v.value
+        p[v.oov] -= 1; // for sum v.value
         return p;
     },
     function reduceInitial() { // init
@@ -872,6 +735,8 @@ rescharts = wordkeys.slice(0,10).map(function(name, index) { // .slice(0,5)
                 	return kv.value[name];
             	})
             	.xyTipsOn(true)
+            	.elasticY(true)
+            	.elasticX(true)
             	.title(function(kv) {
             		//console.log(kv);
                 	return name +  ': ' + kv.value[name]  ;
@@ -882,11 +747,12 @@ console.log(rescharts);
 //console.log(compositeChart);
 compositeChart
     .height(300)
-    .width($(window).width()-100)
+    .width($(window).width()*0.75)
+    //.shareTitle(false)
     
     .margins({top: 10, right: 10, bottom: 30, left: 40})
     .transitionDuration(500)
-    .mouseZoomable(true)
+    .mouseZoomable(false)
     .brushOn(false)
     //.renderDataPoints({radius: 3, fillOpacity: 0.8, strokeOpacity: 0.8})
     .elasticY(true)
@@ -903,7 +769,6 @@ compositeChart
 /******************  range chart **************/
  periodChart2 
         .height(100)
-	    .width($(window).width()-100)
         .margins({top: 10, right: 10, bottom: 30, left: 40})
 	    .dimension(volumeByMonth)
     	.group(volumeByDayGroup)
@@ -916,8 +781,8 @@ compositeChart
 
 /********************* composite chart by domain ***********/
 // Composite chart
-var compositeChart2 = dc.compositeChart("#dc-comptimedomain-chart"+lang);
-var periodChart3 = dc.barChart("#range-chart3"+lang);
+var compositeChart2 = dc.compositeChart("#dc-comptimedomain-chartfr");
+var periodChart3 = dc.barChart("#range-chart3fr");
 
 var volumeByDaycoreGroupTmp2 = volumeByMonth.group().reduce(
     function reduceAdd(p, v) { // add
@@ -974,11 +839,12 @@ console.log(rescharts2);
 //console.log(compositeChart);
 compositeChart2
     .height(300)
-    .width($(window).width()-100)
+    .width($(window).width()*0.75)
+    //.shareTitle(false)
     
     .margins({top: 10, right: 10, bottom: 30, left: 40})
     .transitionDuration(500)
-//    .mouseZoomable(true)
+    .mouseZoomable(false)
     .brushOn(false)
     //.renderDataPoints({radius: 3, fillOpacity: 0.8, strokeOpacity: 0.8})
     .elasticY(true)
@@ -995,7 +861,6 @@ compositeChart2
 /******************  range chart **************/
 periodChart3 
         .height(100)
-	    .width($(window).width()-100)
         .margins({top: 10, right: 10, bottom: 30, left: 40})
 	    .dimension(volumeByMonth)
     	.group(volumeByDayGroup)
@@ -1010,8 +875,8 @@ periodChart3
 
 /********************* composite chart by country ***********/
 // Composite chart
-var compositeChart7 = dc.compositeChart("#dc-comptimecountry-chart"+lang);
-var periodChart7 = dc.barChart("#range-chart7"+lang);
+var compositeChart7 = dc.compositeChart("#dc-comptimecountry-chartfr");
+var periodChart7 = dc.barChart("#range-chart7fr");
 
 var volumeByDaycoreGroupTmp7 = volumeByMonth.group().reduce(
     function reduceAdd(p, v) { // add
@@ -1068,11 +933,12 @@ console.log(rescharts7);
 //console.log(compositeChart);
 compositeChart7
     .height(300)
-    .width($(window).width()-100)
+    .width($(window).width()*0.75)
+    //.shareTitle(false)
     
     .margins({top: 10, right: 10, bottom: 30, left: 40})
     .transitionDuration(500)
-//    .mouseZoomable(true)
+    .mouseZoomable(false)
     .brushOn(false)
     //.renderDataPoints({radius: 3, fillOpacity: 0.8, strokeOpacity: 0.8})
     .elasticY(true)
@@ -1089,7 +955,6 @@ compositeChart7
 /******************  range chart **************/
 periodChart7 
         .height(100)
-	    .width($(window).width()-100)
         .margins({top: 10, right: 10, bottom: 30, left: 40})
 	    .dimension(volumeByMonth)
     	.group(volumeByDayGroup)
@@ -1105,16 +970,16 @@ periodChart7
 
 /********************* composite chart by newspaper ***********/
 // Composite chart
-var compositeChart3 = dc.compositeChart("#dc-comptimenews-chart"+lang);
-var periodChart4 = dc.barChart("#range-chart4"+lang);
+var compositeChart3 = dc.compositeChart("#dc-comptimenews-chartfr");
+var periodChart4 = dc.barChart("#range-chart4fr");
 
 var volumeByDaycoreGroupTmp3 = volumeByMonth.group().reduce(
     function reduceAdd(p, v) { // add
-        p[v.journal] = (p[v.journal] || 0) + 1; //for sum : v.value
+        p[v.source] = (p[v.source] || 0) + 1; //for sum : v.value
         return p;
     },
     function reduceRemove(p, v) { // remove
-        p[v.journal] -= 1; // for sum v.value
+        p[v.source] -= 1; // for sum v.value
         return p;
     },
     function reduceInitial() { // init
@@ -1163,11 +1028,12 @@ console.log(rescharts3);
 //console.log(compositeChart);
 compositeChart3
     .height(300)
-    .width($(window).width()-100)
+    .width($(window).width()*0.75)
+    //.shareTitle(false)
     
     .margins({top: 10, right: 10, bottom: 30, left: 40})
     .transitionDuration(500)
-//    .mouseZoomable(true)
+    .mouseZoomable(false)
     .brushOn(false)
     //.renderDataPoints({radius: 3, fillOpacity: 0.8, strokeOpacity: 0.8})
     .elasticY(true)
@@ -1184,7 +1050,6 @@ compositeChart3
 /******************  range chart **************/
 periodChart4 
         .height(100)
-	    .width($(window).width()-100)
         .margins({top: 10, right: 10, bottom: 30, left: 40})
 	    .dimension(volumeByMonth)
     	.group(volumeByDayGroup)
@@ -1201,11 +1066,11 @@ periodChart4
 
 /*****************************  CORE (lemma, forme, pos) ROW BAR CHART ***********************/
 // **************************forme
-var coreformeChart = dc.rowChart("#dc-coreforme-chart"+lang);
+var coreformeChart = dc.rowChart("#dc-coreforme-chartfr");
 
 //  coreformechart dimensions (with a fake group to keep just top and bottom 15
-    var coreformeDimension = facts.dimension(function (d) { return d.key_word; });
-    var coreformeGroup = coreformeDimension.group().reduceCount(function (d) { return d.key_word; });
+    var coreformeDimension = facts.dimension(function (d) { return d.oov; });
+    var coreformeGroup = coreformeDimension.group().reduceCount(function (d) { return d.oov; });
 
 
 /// for top	
@@ -1253,11 +1118,11 @@ console.log("coreformes chart built");
 console.log(coreformeChart);
 
 //pos
-var coreposChart = dc.rowChart("#dc-corepos-chart"+lang);
+var coreposChart = dc.rowChart("#dc-corepos-chartfr");
 
 //  coreposchart dimensions (with a fake group to keep just top and bottom 15
-    var coreposDimension = facts.dimension(function (d) { return d.key_pos; });
-    var coreposGroup = coreposDimension.group().reduceCount(function (d) { return d.key_pos; });
+    var coreposDimension = facts.dimension(function (d) { return d.oov; });
+    var coreposGroup = coreposDimension.group().reduceCount(function (d) { return d.oov; });
 
 var coreposGroupTop = remove_empty_bins_key(coreposGroup);
 
@@ -1284,11 +1149,11 @@ console.log("coreposs chart built");
 console.log(coreposChart);
 
 // lemma
-var corelemmaChart = dc.rowChart("#dc-corelemma-chart"+lang);
+var corelemmaChart = dc.rowChart("#dc-corelemma-chartfr");
 
 //  corelemmachart dimensions (with a fake group to keep just top and bottom 15
-    var corelemmaDimension = facts.dimension(function (d) { return d.key_lemma; });
-    var corelemmaGroup = corelemmaDimension.group().reduceCount(function (d) { return d.key_lemma; });
+    var corelemmaDimension = facts.dimension(function (d) { return d.oov; });
+    var corelemmaGroup = corelemmaDimension.group().reduceCount(function (d) { return d.oov; });
 
 
 
@@ -1325,7 +1190,7 @@ console.log(corelemmaChart);
 
 /***************************** LEFT CONTEXT 1 ROW BAR CHART ***********************/
 
-var l1lemmaChart = dc.rowChart("#dc-l1lemma-chart"+lang);
+var l1lemmaChart = dc.rowChart("#dc-l1lemma-chartfr");
 
 //  l1lemmachart dimensions (with a fake group to keep just top and bottom 15
     var l1lemmaDimension = facts.dimension(function (d) { return d.l1lemma; });
@@ -1364,7 +1229,7 @@ console.log(l1lemmaChart);
 
 /***************************** LEFT CONTEXT 2 ROW BAR CHART ***********************/
 
-var l2lemmaChart = dc.rowChart("#dc-l2lemma-chart"+lang);
+var l2lemmaChart = dc.rowChart("#dc-l2lemma-chartfr");
 
 //  l2lemmachart dimensions (with a fake group to keep just top and bottom 15
     var l2lemmaDimension = facts.dimension(function (d) { return d.l2lemma; });
@@ -1401,7 +1266,7 @@ console.log(l2lemmaChart);
 
 /***************************** LEFT CONTEXT 3 ROW BAR CHART ***********************/
 
-var l3lemmaChart = dc.rowChart("#dc-l3lemma-chart"+lang);
+var l3lemmaChart = dc.rowChart("#dc-l3lemma-chartfr");
 
 //  l3lemmachart dimensions (with a fake group to keep just top and bottom 15
     var l3lemmaDimension = facts.dimension(function (d) { return d.l3lemma; });
@@ -1438,7 +1303,7 @@ console.log(l3lemmaChart);
 
 /***************************** LEFT CONTEXT 4 ROW BAR CHART ***********************/
 
-var l4lemmaChart = dc.rowChart("#dc-l4lemma-chart"+lang);
+var l4lemmaChart = dc.rowChart("#dc-l4lemma-chartfr");
 
 //  l4lemmachart dimensions (with a fake group to keep just top and bottom 15
     var l4lemmaDimension = facts.dimension(function (d) { return d.l4lemma; });
@@ -1473,7 +1338,7 @@ console.log(l4lemmaChart);
 
 /***************************** LEFT CONTEXT 5 ROW BAR CHART ***********************/
 
-var l5lemmaChart = dc.rowChart("#dc-l5lemma-chart"+lang);
+var l5lemmaChart = dc.rowChart("#dc-l5lemma-chartfr");
 
 //  l5lemmachart dimensions (with a fake group to keep just top and bottom 15
     var l5lemmaDimension = facts.dimension(function (d) { return d.l5lemma; });
@@ -1511,7 +1376,7 @@ console.log(l5lemmaChart);
 
 /***************************** RIGHT CONTEXT 1 ROW BAR CHART ***********************/
 
-var r1lemmaChart = dc.rowChart("#dc-r1lemma-chart"+lang);
+var r1lemmaChart = dc.rowChart("#dc-r1lemma-chartfr");
 
 //  r1lemmachart dimensions (with a fake group to keep just top and bottom 15
     var r1lemmaDimension = facts.dimension(function (d) { return d.r1lemma; });
@@ -1546,7 +1411,7 @@ console.log(r1lemmaChart);
 
 /***************************** RIGHT CONTEXT 2 ROW BAR CHART ***********************/
 
-var r2lemmaChart = dc.rowChart("#dc-r2lemma-chart"+lang);
+var r2lemmaChart = dc.rowChart("#dc-r2lemma-chartfr");
 
 //  r2lemmachart dimensions (with a fake group to keep just top and bottom 15
     var r2lemmaDimension = facts.dimension(function (d) { return d.r2lemma; });
@@ -1582,7 +1447,7 @@ console.log(r2lemmaChart);
 
 /***************************** RIGHT CONTEXT 3 ROW BAR CHART ***********************/
 
-var r3lemmaChart = dc.rowChart("#dc-r3lemma-chart"+lang);
+var r3lemmaChart = dc.rowChart("#dc-r3lemma-chartfr");
 
 //  r3lemmachart dimensions (with a fake group to keep just top and bottom 15
     var r3lemmaDimension = facts.dimension(function (d) { return d.r3lemma; });
@@ -1618,7 +1483,7 @@ console.log(r3lemmaChart);
 
 /***************************** RIGHT CONTEXT 4 ROW BAR CHART ***********************/
 
-var r4lemmaChart = dc.rowChart("#dc-r4lemma-chart"+lang);
+var r4lemmaChart = dc.rowChart("#dc-r4lemma-chartfr");
 
 //  r4lemmachart dimensions (with a fake group to keep just top and bottom 15
     var r4lemmaDimension = facts.dimension(function (d) { return d.r4lemma; });
@@ -1654,7 +1519,7 @@ console.log(r4lemmaChart);
 
 /***************************** RIGHT CONTEXT 5 ROW BAR CHART ***********************/
 
-var r5lemmaChart = dc.rowChart("#dc-r5lemma-chart"+lang);
+var r5lemmaChart = dc.rowChart("#dc-r5lemma-chartfr");
 
 //  r5lemmachart dimensions (with a fake group to keep just top and bottom 15
     var r5lemmaDimension = facts.dimension(function (d) { return d.r5lemma; });
@@ -1690,7 +1555,7 @@ console.log(r5lemmaChart);
 /// forme
 /***************************** LEFT CONTEXT 1 ROW BAR CHART ***********************/
 
-var l1formeChart = dc.rowChart("#dc-l1forme-chart"+lang);
+var l1formeChart = dc.rowChart("#dc-l1forme-chartfr");
 
 //  l1formechart dimensions (with a fake group to keep just top and bottom 15
     var l1formeDimension = facts.dimension(function (d) { return d.l1forme; });
@@ -1728,7 +1593,7 @@ console.log(l1formeChart);
 
 /***************************** LEFT CONTEXT 2 ROW BAR CHART ***********************/
 
-var l2formeChart = dc.rowChart("#dc-l2forme-chart"+lang);
+var l2formeChart = dc.rowChart("#dc-l2forme-chartfr");
 
 //  l2formechart dimensions (with a fake group to keep just top and bottom 15
     var l2formeDimension = facts.dimension(function (d) { return d.l2forme; });
@@ -1765,7 +1630,7 @@ console.log(l2formeChart);
 
 /***************************** LEFT CONTEXT 3 ROW BAR CHART ***********************/
 
-var l3formeChart = dc.rowChart("#dc-l3forme-chart"+lang);
+var l3formeChart = dc.rowChart("#dc-l3forme-chartfr");
 
 //  l3formechart dimensions (with a fake group to keep just top and bottom 15
     var l3formeDimension = facts.dimension(function (d) { return d.l3forme; });
@@ -1802,7 +1667,7 @@ console.log(l3formeChart);
 
 /***************************** LEFT CONTEXT 4 ROW BAR CHART ***********************/
 
-var l4formeChart = dc.rowChart("#dc-l4forme-chart"+lang);
+var l4formeChart = dc.rowChart("#dc-l4forme-chartfr");
 
 //  l4formechart dimensions (with a fake group to keep just top and bottom 15
     var l4formeDimension = facts.dimension(function (d) { return d.l4forme; });
@@ -1837,7 +1702,7 @@ console.log(l4formeChart);
 
 /***************************** LEFT CONTEXT 5 ROW BAR CHART ***********************/
 
-var l5formeChart = dc.rowChart("#dc-l5forme-chart"+lang);
+var l5formeChart = dc.rowChart("#dc-l5forme-chartfr");
 
 //  l5formechart dimensions (with a fake group to keep just top and bottom 15
     var l5formeDimension = facts.dimension(function (d) { return d.l5forme; });
@@ -1875,7 +1740,7 @@ console.log(l5formeChart);
 
 /***************************** RIGHT CONTEXT 1 ROW BAR CHART ***********************/
 
-var r1formeChart = dc.rowChart("#dc-r1forme-chart"+lang);
+var r1formeChart = dc.rowChart("#dc-r1forme-chartfr");
 
 //  r1formechart dimensions (with a fake group to keep just top and bottom 15
     var r1formeDimension = facts.dimension(function (d) { return d.r1forme; });
@@ -1910,7 +1775,7 @@ console.log(r1formeChart);
 
 /***************************** RIGHT CONTEXT 2 ROW BAR CHART ***********************/
 
-var r2formeChart = dc.rowChart("#dc-r2forme-chart"+lang);
+var r2formeChart = dc.rowChart("#dc-r2forme-chartfr");
 
 //  r2formechart dimensions (with a fake group to keep just top and bottom 15
     var r2formeDimension = facts.dimension(function (d) { return d.r2forme; });
@@ -1946,7 +1811,7 @@ console.log(r2formeChart);
 
 /***************************** RIGHT CONTEXT 3 ROW BAR CHART ***********************/
 
-var r3formeChart = dc.rowChart("#dc-r3forme-chart"+lang);
+var r3formeChart = dc.rowChart("#dc-r3forme-chartfr");
 
 //  r3formechart dimensions (with a fake group to keep just top and bottom 15
     var r3formeDimension = facts.dimension(function (d) { return d.r3forme; });
@@ -1982,7 +1847,7 @@ console.log(r3formeChart);
 
 /***************************** RIGHT CONTEXT 4 ROW BAR CHART ***********************/
 
-var r4formeChart = dc.rowChart("#dc-r4forme-chart"+lang);
+var r4formeChart = dc.rowChart("#dc-r4forme-chartfr");
 
 //  r4formechart dimensions (with a fake group to keep just top and bottom 15
     var r4formeDimension = facts.dimension(function (d) { return d.r4forme; });
@@ -2018,7 +1883,7 @@ console.log(r4formeChart);
 
 /***************************** RIGHT CONTEXT 5 ROW BAR CHART ***********************/
 
-var r5formeChart = dc.rowChart("#dc-r5forme-chart"+lang);
+var r5formeChart = dc.rowChart("#dc-r5forme-chartfr");
 
 //  r5formechart dimensions (with a fake group to keep just top and bottom 15
     var r5formeDimension = facts.dimension(function (d) { return d.r5forme; });
@@ -2058,7 +1923,7 @@ console.log(r5formeChart);
 
 /***************************** LEFT CONTEXT 1 ROW BAR CHART ***********************/
 
-var l1posChart = dc.rowChart("#dc-l1pos-chart"+lang);
+var l1posChart = dc.rowChart("#dc-l1pos-chartfr");
 
 //  l1poschart dimensions (with a fake group to keep just top and bottom 15
     var l1posDimension = facts.dimension(function (d) { return d.l1pos; });
@@ -2095,7 +1960,7 @@ console.log(l1posChart);
 
 /***************************** LEFT CONTEXT 2 ROW BAR CHART ***********************/
 
-var l2posChart = dc.rowChart("#dc-l2pos-chart"+lang);
+var l2posChart = dc.rowChart("#dc-l2pos-chartfr");
 
 //  l2poschart dimensions (with a fake group to keep just top and bottom 15
     var l2posDimension = facts.dimension(function (d) { return d.l2pos; });
@@ -2132,7 +1997,7 @@ console.log(l2posChart);
 
 /***************************** LEFT CONTEXT 3 ROW BAR CHART ***********************/
 
-var l3posChart = dc.rowChart("#dc-l3pos-chart"+lang);
+var l3posChart = dc.rowChart("#dc-l3pos-chartfr");
 
 //  l3poschart dimensions (with a fake group to keep just top and bottom 15
     var l3posDimension = facts.dimension(function (d) { return d.l3pos; });
@@ -2169,7 +2034,7 @@ console.log(l3posChart);
 
 /***************************** LEFT CONTEXT 4 ROW BAR CHART ***********************/
 
-var l4posChart = dc.rowChart("#dc-l4pos-chart"+lang);
+var l4posChart = dc.rowChart("#dc-l4pos-chartfr");
 
 //  l4poschart dimensions (with a fake group to keep just top and bottom 15
     var l4posDimension = facts.dimension(function (d) { return d.l4pos; });
@@ -2204,7 +2069,7 @@ console.log(l4posChart);
 
 /***************************** LEFT CONTEXT 5 ROW BAR CHART ***********************/
 
-var l5posChart = dc.rowChart("#dc-l5pos-chart"+lang);
+var l5posChart = dc.rowChart("#dc-l5pos-chartfr");
 
 //  l5poschart dimensions (with a fake group to keep just top and bottom 15
     var l5posDimension = facts.dimension(function (d) { return d.l5pos; });
@@ -2242,7 +2107,7 @@ console.log(l5posChart);
 
 /***************************** RIGHT CONTEXT 1 ROW BAR CHART ***********************/
 
-var r1posChart = dc.rowChart("#dc-r1pos-chart"+lang);
+var r1posChart = dc.rowChart("#dc-r1pos-chartfr");
 
 //  r1poschart dimensions (with a fake group to keep just top and bottom 15
     var r1posDimension = facts.dimension(function (d) { return d.r1pos; });
@@ -2277,7 +2142,7 @@ console.log(r1posChart);
 
 /***************************** RIGHT CONTEXT 2 ROW BAR CHART ***********************/
 
-var r2posChart = dc.rowChart("#dc-r2pos-chart"+lang);
+var r2posChart = dc.rowChart("#dc-r2pos-chartfr");
 
 //  r2poschart dimensions (with a fake group to keep just top and bottom 15
     var r2posDimension = facts.dimension(function (d) { return d.r2pos; });
@@ -2313,7 +2178,7 @@ console.log(r2posChart);
 
 /***************************** RIGHT CONTEXT 3 ROW BAR CHART ***********************/
 
-var r3posChart = dc.rowChart("#dc-r3pos-chart"+lang);
+var r3posChart = dc.rowChart("#dc-r3pos-chartfr");
 
 //  r3poschart dimensions (with a fake group to keep just top and bottom 15
     var r3posDimension = facts.dimension(function (d) { return d.r3pos; });
@@ -2349,7 +2214,7 @@ console.log(r3posChart);
 
 /***************************** RIGHT CONTEXT 4 ROW BAR CHART ***********************/
 
-var r4posChart = dc.rowChart("#dc-r4pos-chart"+lang);
+var r4posChart = dc.rowChart("#dc-r4pos-chartfr");
 
 //  r4poschart dimensions (with a fake group to keep just top and bottom 15
     var r4posDimension = facts.dimension(function (d) { return d.r4pos; });
@@ -2385,7 +2250,7 @@ console.log(r4posChart);
 
 /***************************** RIGHT CONTEXT 5 ROW BAR CHART ***********************/
 
-var r5posChart = dc.rowChart("#dc-r5pos-chart"+lang);
+var r5posChart = dc.rowChart("#dc-r5pos-chartfr");
 
 //  r5poschart dimensions (with a fake group to keep just top and bottom 15
     var r5posDimension = facts.dimension(function (d) { return d.r5pos; });
@@ -2418,72 +2283,227 @@ console.log("r5poss chart built");
 console.log(r5posChart);
 
 
+/***************************** DATATABLE VIEW (tableview) ******************/
+/*var tableview = dc.tableview("#dc-table-chart"+lang);
+var timeDimension = facts.dimension(function (d) {
+    return d.dtg;
+  });
+var timedimensiongrp = timeDimension.group();
+console.log("Dimensions created");
 
-/***************************** DATATABLES CHART ***********************/
-
-// sauvegarde version limitée datatables
-var dataTableDC = dc.dataTable("#dc-table-chart"+lang);
-// Create dataTable dimension
+    tableview
+        .dimension(timeDimension)
+        .group(timedimensiongrp)
+        .size(10)
+        .columns([
+            { title: "Date", data:  function(d) { return d.date; }},
+            { title: "Language", data: function(d) { return d.lang; } },
+            { title: "Country", data: function(d) { return d.country;}},
+            { title: "Source", data: function(d) { return '<a href=\"' + d.url + "\" target=\"_blank\">" +d.source+"</a>";} },
+            { title: "Contextes", data: function(d) { return d.contents[0];}} 
+        ])
+        .enableColumnReordering(true)
+        .enablePaging(true)
+        .enablePagingSizeChange(true)
+        .enableSearch(true)
+        .enableScrolling(false)
+        .rowId("Date")
+        .responsive(true)
+        .select(false)
+        .fixedHeader(true)
+        .buttons(["pdf", "csv", "excel", "print"])
+        .pagingInfoText("_START_ - _END_ on _TOTAL_ articles")
+        .listeners({
+            rowDblClicked: function (row, data, index) {
+            	alert("Sauvegarde de cet exemple dans la base de données (fonctionnalité à venir)" + JSON.stringify(data));
+            }
+        })
+        ;*/
+/********* DATATABLE from https://github.com/dc-js/dc.datatables.js/ ******************************/
+/*
+var nasdaqTable = dc_datatables.datatable("#dc-table-chart"+lang);
 var timeDimension = facts.dimension(function (d) {
     return d.dtg;
   });
 console.log("Dimensions created");
-/// render the datatable
+
+
+    nasdaqTable 
+        .dimension(timeDimension)
+        .group(function(d) { return ""})
+        .columns([
+            { label: "Date", type:'date', format:  function(d) { return d.date.substring(0,10); }},
+            { label: "Language", type:'string', format: function(d) { return d.lang; } },
+            { label: "Country", type:'string', format: function(d) { return d.country;}},
+            { label: "Source", type:'string', format: function(d) { return '<u><a href=\"' + d.url + "\" target=\"_blank\">" +d.source+"</a></u>";} },
+            { label: "Contextes", type:'string', format: function(d) { return d.contents[0];}} 
+        ]);
+*/
+/***************************** DATATABLES CHART ***********************/
+
+// sauvegarde version limitée datatables
+var timeDimension = facts.dimension(function (d) {
+    return d.dtg;
+  });
+var dataTableDC = dc.dataTable("#dc-table-chartfr");
 dataTableDC
-//    .width(960).height(800)
     .dimension(timeDimension)
 	.group(function(d) { return ""})
-	//.size(10)
 	.turnOnControls(true)
+	.size(Infinity)
     .controlsUseVisibility(true)
     .columns([
       function(d) { return d.date; },
-      function(d) { return '<a href=\"' + d.url + "\" target=\"_blank\">" +d.journal+"</a>";},
+      function(d) { return d.lang; },
       function(d) { return d.country; },
-      function(d) { return d.sentence;},
+      function(d) { return '<a href=\"' + d.url + "\" target=\"_blank\">" +d.source+"</a>";},
+      function(d) { return d.contents[0];},
     ])
     .sortBy(function(d){ return d.dtg; })
-    .order(d3.descending);
-    //console.log(dataTableDC);
-
+    .order(d3.descending)
+    .on('preRender', update_offset)
+    .on('preRedraw', update_offset)
+    .on('pretransition', display);
+    
 console.log("Datatable chart built");
 console.log(timeDimension);
+
+// datatable paging
+// use odd page size to show the effect better
+var ofs = 0;
+var pag = 25;
+var defaultorder = 'descending';
+var defaultsortfield = 'dtg';
+
+function update_offset() {
+          var totFilteredRecs = facts.groupAll().value();
+          var end = ofs + pag > totFilteredRecs ? totFilteredRecs : ofs + pag;
+          ofs = ofs >= totFilteredRecs ? Math.floor((totFilteredRecs - 1) / pag) * pag : ofs;
+          ofs = ofs < 0 ? 0 : ofs;
+
+          dataTableDC.beginSlice(ofs);
+          dataTableDC.endSlice(ofs+pag);
+      }
+function display() {
+          var totFilteredRecs = facts.groupAll().value();
+          var end = ofs + pag > totFilteredRecs ? totFilteredRecs : ofs + pag;
+          d3.select('#begin')
+              .text(end === 0? ofs : ofs + 1);
+          d3.select('#end')
+              .text(end);
+          d3.select('#previous')
+              .attr('disabled', ofs-pag<0 ? 'true' : null);
+          d3.select('#next')
+              .attr('disabled', ofs+pag>=totFilteredRecs ? 'true' : null);
+          d3.select('#size').text(totFilteredRecs);
+          if(totFilteredRecs != facts.size()){
+            d3.select('#totalsize').text("(filtered Total: " + facts.size() + " )");
+          }else{
+            d3.select('#totalsize').text('');
+          }
+      }
+function next() {
+          ofs += pag;
+          update_offset();
+          dataTableDC.redraw();
+      }
+function previous() {
+          ofs -= pag;
+          update_offset();
+          dataTableDC.redraw();
+      }
+$('#next').on('click', function () {next();});
+$('#previous').on('click', function () {previous();});
+
+// sorting
+$("th[id$='_sort']").on('click', function () {
+	//console.log(this);
+	//console.log(this.value);
+	 current_field = this.id.split('_')[0];
+	 console.log(current_field);
+	 if (defaultsortfield == current_field && defaultorder=='descending'){
+	 	dataTableDC.order(d3.ascending);
+	 	dataTableDC.redraw();
+	 	defaultorder = 'ascending';
+	 }
+	 else if (defaultsortfield ==current_field && defaultorder=='ascending') {
+	 	dataTableDC.order(d3.descending);
+	 	dataTableDC.redraw();
+	 	defaultorder = 'descending';
+	 }
+	 else{
+	 	dataTableDC.sortBy(function(d){ return d[current_field]; })
+	 	dataTableDC.order(d3.descending);
+	 	dataTableDC.redraw();
+	 	defaultorder = 'descending';
+	 	defaultsortfield = current_field;
+	 
+	 }
+	 //dataTableDC.sortBy(function(d) {return d.date;});
+	 dataTableDC.redraw();
+});
+$('#langsort').on('click', function () {dataTableDC.sortBy(function(d) {return d.lang;});dataTableDC.redraw();});
+$('#countrysort').on('click', function () {dataTableDC.sortBy(function(d) {return d.country;});dataTableDC.redraw();});
+$('#sourcesort').on('click', function () {dataTableDC.sortBy(function(d) {return d.source;});dataTableDC.redraw();});
+//$('#contextsort').on('click', function () {previous();});
+
+// length of page data : to be done
+$('#table_length').on('change',function(){
+                pag = parseInt(this.value, 10);
+                console.log(pag);
+				//update_offset();
+          		dataTableDC.redraw();            
+          		});
+
+// initialize table_length
+//var table_length = $("#table_length").children("option:selected").val();
+//console.log(table_length);
+
+
 /***************** datatables with pagination, sorting search ***********/
 
 //table
 //dimension for table search
-/*var tDimension = facts.dimension(function (d) { return d;});
+/*
+var tDimension = facts.dimension(function (d) { return d.dtg;});
 var tableDimension = tDimension.group().reduceCount();
 var tableDimensionTop = remove_empty_bins(tableDimension);
 console.log("table Dimensions created");
 console.log(tDimension);
 console.log(tableDimensionTop.all());
 var dOptions = {
+		retrieve: true,
         "bSort": true,
 		columnDefs: [
 			{
 				targets: 0,
 				data: function (d) {
-				return d.date; }
+				return d.date.substring(0,10); }
 			}
 			,
 			{
 				targets: 1,
 				data: function (d) { 
-//				 return get_text_from_neoveille(d);   } 
-				return '<a href=\"' + d.link + "\" target=\"_blank\">" +d.newspaper+"</a>"; }
+				return d.lang;  }
 			}
 			,
 			{
 				targets: 2,
 				data: function (d) { 
-				return d.subject;  }
+				return d.country;  }
 			}
-			,
+			,			
 			{
 				targets: 3,
 				data: function (d) { 
-				 return get_text_from_neoveille(d);   } 
+				return '<a href=\"' + d.url + "\" target=\"_blank\">" +d.source+"</a>"; }
+			}
+
+			,
+			{
+				targets: 4,
+				data: function (d) { 
+				 return d.contents[0];   } 
 			}
 		]
 	};
@@ -2492,7 +2512,6 @@ datatablesynth.dataTable(dOptions);
 
 function RefreshTable() {
             dc.events.trigger(function () {
-               // alldata = tableDimensionTop.top(Infinity);
                 alldata = tDimension.top(Infinity);
                 
                 datatablesynth.fnClearTable();
@@ -2507,12 +2526,14 @@ for (var i = 0; i < dc.chartRegistry.list().length; i++) {
 	}
 	
 $(":input").on('keyup',function(){
-		text_filter(tDimension, this.value);//cities is the dimension for the data table
+		text_filter(tDimension, this.value);
 
 function text_filter(dim,q){
 		 if (q!='') {
 			dim.filter(function(d){
-				return d.indexOf (q.toLowerCase()) !== -1;
+				console.log(d, q);
+				//return 0 == d.search(re);
+				return d.search(q.toLowerCase()) !== -1;
 			});
 		} else {
 			dim.filterAll();
@@ -2521,18 +2542,24 @@ function text_filter(dim,q){
 		dc.redrawAll();}
 });
 	
-RefreshTable();
+//RefreshTable();
 console.log("Datatable chart built");
 console.log(tableDimension);
 */
+
+
+
 
 /***************************** RENDER ALL THE CHARTS  ***********************/
 // Render the Charts
 dc.renderAll();
 
+ 
+
 }
 
-// END OF JSI timestamped web corpus (in local db) search
+// END OF JSI timestamped web corpus (in json file) search
+
 
 
 
@@ -2683,6 +2710,10 @@ function createChild ( row ) {
 
 // Word behavior in one datatable
 $('#exampleNeo tbody').on('click', 'td.word-behavior', function () {
+	alert("This feature will be implemented soon. Please come back later");
+} );
+// to be done
+$('#exampleNeo tbody').on('click', 'td.word-behavior_tobedone', function () {
 	var td = $(this)
     var tr = $(this).closest('tr');
     var row = tableNeo.row( tr ); 
@@ -4971,1657 +5002,6 @@ console.log(tableDimension);
 	$("#neoinfoBtn"+lang).replaceWith('<a href="#" class="btn btn-info" id="neoinfoBtn2Done">Chargement effectué. ' + jsondata.length + ' occurrences de néologismes</a>');
     // Render the Charts
   	dc.renderAll(); 
-
-}
-
-
-function build_neo_contexts_viz2_bk(jsondata, lang){
-
-console.log(jsondata[0]);
-
-/********************* GET THE JSON DATA AND TRANSFORM WHEN NECESSARY ***********/
-  // format our data : dateS,source,link,subject,subject2, neologisms
-  
-  
-  var dtgFormat = d3.time.format("%Y-%m-%d %H:%M:%S");
-  
-  jsondata.forEach(function(d) { 
-  		//console.log(d);
-    	d.dtg   = dtgFormat.parse(d.date);
- 	d.newspaper   = d.journal;
-    	d.subject  = d.subject;
-    	d.article= d.link;
-    	//d.core = d.coreforme.toLowerCase() + "/" + d.corepos.toLowerCase();
-    	//d.core = d.core.toLowerCase();
-    	//res = d.core.split("\/");
-    	//if (res.length==3){d.coreforme=res[0];d.corepos=res[1];d.corelemma=res[2];}
-    	//else{d.coreforme="";d.corepos="";d.corelemma="";}
-    	if (d.corelemma=='unknown'){d.corelemma=d.coreforme;}
-    	if (d.l5lemma=='unknown'){d.l5lemma=d.l5forme;}
-    	if (d.l4lemma=='unknown'){d.l4lemma=d.l4forme;}
-    	if (d.l3lemma=='unknown'){d.l3lemma=d.l3forme;}
-    	if (d.l2lemma=='unknown'){d.l2lemma=d.l2forme;}
-    	if (d.l1lemma=='unknown'){d.l1lemma=d.l1forme;}
-    	if (d.r5lemma=='unknown'){d.r5lemma=d.r5forme;}
-    	if (d.r4lemma=='unknown'){d.r4lemma=d.r4forme;}
-    	if (d.r3lemma=='unknown'){d.r3lemma=d.r3forme;}
-    	if (d.r2lemma=='unknown'){d.r2lemma=d.r2forme;}
-    	if (d.r1lemma=='unknown'){d.r1lemma=d.r1forme;}
-    	
-
-  }); 
- console.log("Data Loaded");
-
-/*******************  GLOBAL DIMENSIONS ****************************/
-  // Run the data through crossfilter and load our 'facts'
-  var facts = crossfilter(jsondata);
-  var all = facts.groupAll();
-  
-
-/*************** TOTAL CHART *********************************/
-  
-totalCount = dc.dataCount('.dc-data-count'+lang);
-totalCount 
-        .dimension(facts)
-        .group(all)  
-        .html({
-            some: '<strong>%filter-count</strong> sélectionnés sur <strong>%total-count</strong> articles' +
-                ' | <a href=\'javascript:dc.filterAll(); dc.renderAll();\'>Réinitialiser</a>',
-            all: 'Tous les articles sélectionnés. Cliquez sur les graphes pour effectuer des filtres.'
-        });
-  
-totalCount2 = dc.dataCount('.dc-data-count2'+lang);
-totalCount2 
-        .dimension(facts)
-        .group(all)  
-        .html({
-            some: '<strong>%filter-count</strong> sélectionnés sur <strong>%total-count</strong> articles' +
-                ' | <a href=\'javascript:dc.filterAll(); dc.renderAll();\'>Réinitialiser</a>',
-            all: 'Tous les articles sélectionnés. Cliquez sur les graphes pour effectuer des filtres.'
-        });
-  
-  
-console.log("Count chart built"); 		   
-console.log(totalCount);
-/***************************** NEOPOS ROW BAR CHART ***********************/
-
-var neoChart = dc.rowChart("#dc-neo-chart"+lang);
-
-// neologismes dimensions : attention buggy as field = array!!!
-var neoDim = facts.dimension(function(d){ return d.coreforme + "/"+d.corepos;});
-var neoGroup = neoDim.group().reduceCount(function(d) { return d.coreforme + "/" + d.corepos; });
-
-
-/// for top	
-function remove_empty_bins_top(source_group) {
-    function non_zero_pred(d) {
-        return d.value != 0;
-    }
-    return {
-        all: function () {
-            return source_group.all().filter(non_zero_pred);
-        },
-        top: function(n) {
-            return source_group.top(Infinity)
-                .filter(non_zero_pred)
-                .slice(0, n);
-        }
-    };
-}
-var neoGroupTop = remove_empty_bins_top(neoGroup);
-
-
-
-
-// neo chart
-	neoChart
-			.width(350)
-           .height(300)
-            .dimension(neoDim)
-            .group(neoGroupTop)
-            .rowsCap(15)
-            .othersGrouper(false)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            //.title(function(d){return d.key + ' (' + d.value + ')';})
-            .renderLabel(true)
-            .gap(0.1)
-            //.renderTitleLabel(true)
-            .ordering(function (d) {
-    			return -d.value
-			})
-    		.elasticX(true)
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);		   
-
-
-console.log("Neo chart built");
-console.log(neoChart);
-
-
-/***************************** TIMELINE ***********************/
-
-
-
-// see http://dc-js.github.io/dc.js/docs/html/dc.lineChart.html
-// Create the dc.js chart objects & link to div
-var timeChart = dc.lineChart("#dc-time-chart"+lang);
-var periodChart = dc.barChart("#range-chart"+lang);
-
-// create timeline chart dimensions
-	var volumeByDay = facts.dimension(function(d) {
-    return d3.time.day(d.dtg);
-  });
-	var volumeByMonth = facts.dimension(function(d) {
-    return d3.time.month(d.dtg);
-  });
-
-  var volumeByDayGroup = volumeByDay.group()
-    .reduceCount(function(d) { return d.dtg; });
-    console.log("Day groups :" + volumeByDayGroup.size());
-
-  var volumeByMonthGroup = volumeByMonth.group()
-    .reduceCount(function(d) { return d.dtg; });
-	console.log("Month groups :" + volumeByMonthGroup.size());
-    
-    // min and max date
-    var minDate = volumeByDay.bottom(1)[0].dtg;
- 	var maxDate = volumeByDay.top(1)[0].dtg;
-	console.log(String(minDate) + ":" + String(maxDate));
-
-  // setup timeline graph
-  timeChart
-  	//.width(700)
-   .height(250)
-    .margins({top: 10, right: 10, bottom: 30, left: 40})
-    .dotRadius(5) //
-    //.renderArea(true)
-    .dimension(volumeByDay)
-    .group(volumeByDayGroup)
-    .transitionDuration(500)
-    .mouseZoomable(true)
-    .brushOn(false)
-    .renderDataPoints({radius: 3, fillOpacity: 0.8, strokeOpacity: 0.8})
-    .title(function(d){
-      return dtgFormat(d.key)
-      + "\nTotal : " + d.value;
-      })
-    .elasticY(true)
-    .rangeChart(periodChart)
-    .xUnits(d3.time.day)
-    .renderHorizontalGridLines(true)    
-    .x(d3.time.scale().domain([minDate, maxDate]))
-    .xAxis();
-
-
-  
-  console.log("Time chart built");
-  console.log(timeChart);
-  
-/******************  range chart **************/
-periodChart /* dc.barChart('#monthly-volume-chart', 'chartGroup'); */
-        .height(100)
-        .margins({top: 0, right: 0, bottom: 20, left: 40})
-	    .dimension(volumeByDay)
-    	.group(volumeByDayGroup)
-        .centerBar(true)
-        .elasticY(true)
-        //.gap(1)
-        .x(d3.time.scale().domain([minDate, maxDate]))
-        //.round(d3.time.month.round)
-        .alwaysUseRounding(true)
-        .xUnits(d3.time.month);
-
-/********************* composite chart ***********/
-// Composite chart
-var compositeChart = dc.compositeChart("#dc-comptime-chart"+lang);
-var periodChart2 = dc.barChart("#range-chart2"+lang);
-
-var volumeByDaycoreGroup = volumeByDay.group().reduce(
-    function reduceAdd(p, v) { // add
-        p[v.core] = (p[v.core] || 0) + 1; //for sum : v.value
-        return p;
-    },
-    function reduceRemove(p, v) { // remove
-        p[v.core] -= 1; // for sum v.value
-        return p;
-    },
-    function reduceInitial() { // init
-        return {};
-    }); 
-
-// build list of neo types
-wordkeys= [];
-reskeys = neoGroupTop.all();
-for (var i = 0; i < reskeys.length; i++){wordkeys.push(reskeys[i].key);}
-//console.log("Word keys");
-//console.log(wordkeys);
-
-console.log(volumeByDaycoreGroup.all());
-console.log(wordkeys);
-rescharts = wordkeys.map(function(name) {
-        	return dc.barChart(compositeChart)
-            	.dimension(volumeByDay)
-            	.colors('#'+Math.random().toString(16).slice(-6))
-            	.group(volumeByDaycoreGroup,name)
-            	.valueAccessor(function(kv) {
-                	return kv.value[name];
-            	})
-            	.title(function(kv) {
-                	return name + ' ' + kv.key + ': ' + kv.value;
-            	});
-    		});
-console.log(rescharts);
-//console.log(compositeChart);
-compositeChart
-    .height(300)
-    .shareTitle(false)
-    .margins({top: 10, right: 10, bottom: 30, left: 40})
-    
-    //.dotRadius(5) //
-    //.renderArea(true)
-    //.dimension(volumeByDay)
-    .transitionDuration(500)
-    .mouseZoomable(true)
-    .brushOn(false)
-    //.renderDataPoints({radius: 3, fillOpacity: 0.8, strokeOpacity: 0.8})
-    .elasticY(true)
-	.compose(rescharts)
-    .rangeChart(periodChart2)
-    .xUnits(d3.time.day)
-    .renderHorizontalGridLines(true)    
-    .x(d3.time.scale().domain([minDate, maxDate]))
-    .legend(dc.legend()) //.x(50).y(30)
-    .xAxis();
-/******************  range chart **************/
-periodChart2 
-        .height(100)
-        .margins({top: 0, right: 0, bottom: 20, left: 40})
-	    .dimension(volumeByDay)
-    	.group(volumeByDayGroup)
-        .centerBar(true)
-        .elasticY(true)
-        //.gap(1)
-        .x(d3.time.scale().domain([minDate, maxDate]))
-        //.round(d3.time.month.round)
-        .alwaysUseRounding(true)
-        .xUnits(d3.time.month);
-
-/***************************** SUBJECT PIE CHART ***********************/
-
-// Create the dc.js chart objects & link to div
-var subjectChart = dc.pieChart("#dc-subject-chart"+lang);
-
-
-//  subjectchart  dimensions
-    var subjectDimension = facts.dimension(function (d) { return d.subject; });
-    var subjectGroup = subjectDimension.group();
-	console.log("Subject groups :" + subjectGroup.size());
-  
-// subject chart
- 	subjectChart
- 		.width(500)
-        .height(250)
-        .cx(300)
-        .slicesCap(10)
-        .ordering(function (d) {
-    			return -d.value
-			})
-        .innerRadius(30)
-        .externalLabels(30)
-        .externalRadiusPadding(20)
-        .minAngleForLabel(0.5)
-        .drawPaths(true)
-        .transitionDuration(500)
-        .turnOnControls(true)
-	    .controlsUseVisibility(true)
-        .dimension(subjectDimension)
-        .group(subjectGroup)
- 	    .legend(dc.legend().x(0).y(20).itemHeight(10).gap(5));
-        
-console.log("Subject chart built");
-console.log(subjectChart);
-
-/***************************** NEWSPAPER ROW BAR CHART ***********************/
-
-var newspaperChart = dc.rowChart("#dc-newspaper-chart"+lang);
-//var newspaperChartLow = dc.rowChart("#dc-newspaper-chart-low");
-
-//  newspaperchart dimensions (with a fake group to keep just top and bottom 15
-    var newspaperDimension = facts.dimension(function (d) { return d.newspaper; });
-    //var newspaperDimensionless100 = facts.dimension(function (d) { return d.newspaper; }).filterRange([0, 100]);
-    var newspaperGroup = newspaperDimension.group().reduceCount(function (d) { return d.newspaper; });
-//    var newspaperTopGroup = newspaperGroup.top(15);
-
-/// for top	
-function remove_empty_bins(source_group) {
-    function non_zero_pred(d) {
-        return d.value != 0;
-    }
-    return {
-        all: function () {
-            return source_group.all().filter(non_zero_pred);
-        },
-        top: function(n) {
-            return source_group.top(Infinity)
-                .filter(non_zero_pred)
-                .slice(0, n);
-        }
-    };
-}
-
-var newspaperGroupTop = remove_empty_bins(newspaperGroup);
-//var newspaperGroupLow = remove_empty_bins_low(newspaperGroup);
-
-console.log("newspaper groups :" + newspaperGroup.size());
-
-// newspaper setup rowschart (TOP)
-    newspaperChart
-    		.width(500)
-            .height(250)
-            .dimension(newspaperDimension)
-            .group(newspaperGroupTop)
-            .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-
-
-console.log("Newspapers chart built");
-//console.log(newspaperChartLow);
-console.log(newspaperChart);
-
-
-
-/*****************************  CORE (lemma, forme, pos) ROW BAR CHART ***********************/
-// **************************forme
-var coreformeChart = dc.rowChart("#dc-coreforme-chart"+lang);
-
-//  coreformechart dimensions (with a fake group to keep just top and bottom 15
-    var coreformeDimension = facts.dimension(function (d) { return d.coreforme; });
-    var coreformeGroup = coreformeDimension.group().reduceCount(function (d) { return d.coreforme; });
-
-
-/// for top	
-function remove_empty_bins_key(source_group) {
-    function non_zero_pred(d) {
-    	if (d.key && d.value>0){return d.key;}
-    }
-    return {
-        all: function () {
-            return source_group.all().filter(non_zero_pred);
-        },
-        top: function(n) {
-            return source_group.top(Infinity)
-                .filter(non_zero_pred)
-                .slice(0, n);
-        }
-    };
-}
-
-
-var coreformeGroupTop = remove_empty_bins_key(coreformeGroup);
-//var coreformeGroupLow = remove_empty_bins_low(coreformeGroup);
-
-console.log("coreforme groups :" + coreformeGroup.size());
-
-// coreforme setup rowschart (TOP)
-    coreformeChart
-    		.width(200)
-          .height(300)
-            .dimension(coreformeDimension)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .group(coreformeGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-console.log("coreformes chart built");
-console.log(coreformeChart);
-
-//pos
-var coreposChart = dc.rowChart("#dc-corepos-chart"+lang);
-
-//  coreposchart dimensions (with a fake group to keep just top and bottom 15
-    var coreposDimension = facts.dimension(function (d) { return d.corepos; });
-    var coreposGroup = coreposDimension.group().reduceCount(function (d) { return d.corepos; });
-
-var coreposGroupTop = remove_empty_bins_key(coreposGroup);
-
-console.log("corepos groups :" + coreposGroup.size());
-
-// corepos setup rowschart (TOP)
-    coreposChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(coreposDimension)
-            .group(coreposGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-console.log("coreposs chart built");
-console.log(coreposChart);
-
-// lemma
-var corelemmaChart = dc.rowChart("#dc-corelemma-chart"+lang);
-
-//  corelemmachart dimensions (with a fake group to keep just top and bottom 15
-    var corelemmaDimension = facts.dimension(function (d) { return d.corelemma; });
-    var corelemmaGroup = corelemmaDimension.group().reduceCount(function (d) { return d.corelemma; });
-
-
-
-var corelemmaGroupTop = remove_empty_bins_key(corelemmaGroup);
-//var corelemmaGroupLow = remove_empty_bins_low(corelemmaGroup);
-
-console.log("corelemma groups :" + corelemmaGroup.size());
-
-// corelemma setup rowschart (TOP)
-    corelemmaChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(corelemmaDimension)
-            .group(corelemmaGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-console.log("corelemmas chart built");
-//console.log(corelemmaChartLow);
-console.log(corelemmaChart);
-
-
-
-
-/*********************** contextes *********/
-/// lemma
-
-/***************************** LEFT CONTEXT 1 ROW BAR CHART ***********************/
-
-var l1lemmaChart = dc.rowChart("#dc-l1lemma-chart"+lang);
-
-//  l1lemmachart dimensions (with a fake group to keep just top and bottom 15
-    var l1lemmaDimension = facts.dimension(function (d) { return d.l1lemma; });
-    var l1lemmaGroup = l1lemmaDimension.group().reduceCount(function (d) { return d.l1lemma; });
-
-
-
-var l1lemmaGroupTop = remove_empty_bins_key(l1lemmaGroup);
-//var l1lemmaGroupLow = remove_empty_bins_low(l1lemmaGroup);
-
-console.log("l1lemma groups :" + l1lemmaGroup.size());
-console.log(l1lemmaGroup.all());
-
-// l1lemma setup rowschart (TOP)
-    l1lemmaChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(l1lemmaDimension)
-            .group(l1lemmaGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-console.log("l1lemmas chart built");
-//console.log(l1lemmaChartLow);
-console.log(l1lemmaChart);
-
-
-
-/***************************** LEFT CONTEXT 2 ROW BAR CHART ***********************/
-
-var l2lemmaChart = dc.rowChart("#dc-l2lemma-chart"+lang);
-
-//  l2lemmachart dimensions (with a fake group to keep just top and bottom 15
-    var l2lemmaDimension = facts.dimension(function (d) { return d.l2lemma; });
-    var l2lemmaGroup = l2lemmaDimension.group().reduceCount(function (d) { return d.l2lemma; });
-
-var l2lemmaGroupTop = remove_empty_bins_key(l2lemmaGroup);
-//var l2lemmaGroupLow = remove_empty_bins_low(l2lemmaGroup);
-
-console.log("l2lemma groups :" + l2lemmaGroup.size());
-
-// l2lemma setup rowschart (TOP)
-    l2lemmaChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(l2lemmaDimension)
-            .group(l2lemmaGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-
-console.log("l2lemmas chart built");
-//console.log(l2lemmaChartLow);
-console.log(l2lemmaChart);
-
-
-
-/***************************** LEFT CONTEXT 3 ROW BAR CHART ***********************/
-
-var l3lemmaChart = dc.rowChart("#dc-l3lemma-chart"+lang);
-
-//  l3lemmachart dimensions (with a fake group to keep just top and bottom 15
-    var l3lemmaDimension = facts.dimension(function (d) { return d.l3lemma; });
-    var l3lemmaGroup = l3lemmaDimension.group().reduceCount(function (d) { return d.l3lemma; });
-
-var l3lemmaGroupTop = remove_empty_bins_key(l3lemmaGroup);
-//var l3lemmaGroupLow = remove_empty_bins_low(l3lemmaGroup);
-
-console.log("l3lemma groups :" + l3lemmaGroup.size());
-
-// l3lemma setup rowschart (TOP)
-    l3lemmaChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(l3lemmaDimension)
-            .group(l3lemmaGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-
-
-console.log("l3lemmas chart built");
-//console.log(l3lemmaChartLow);
-console.log(l3lemmaChart);
-
-
-/***************************** LEFT CONTEXT 4 ROW BAR CHART ***********************/
-
-var l4lemmaChart = dc.rowChart("#dc-l4lemma-chart"+lang);
-
-//  l4lemmachart dimensions (with a fake group to keep just top and bottom 15
-    var l4lemmaDimension = facts.dimension(function (d) { return d.l4lemma; });
-    var l4lemmaGroup = l4lemmaDimension.group().reduceCount(function (d) { return d.l4lemma; });
-
-var l4lemmaGroupTop = remove_empty_bins_key(l4lemmaGroup);
-//var l4lemmaGroupLow = remove_empty_bins_low(l4lemmaGroup);
-
-console.log("l4lemma groups :" + l4lemmaGroup.size());
-
-// l4lemma setup rowschart (TOP)
-    l4lemmaChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(l4lemmaDimension)
-            .group(l4lemmaGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-console.log("l4lemmas chart built");
-//console.log(l4lemmaChartLow);
-console.log(l4lemmaChart);
-
-
-/***************************** LEFT CONTEXT 5 ROW BAR CHART ***********************/
-
-var l5lemmaChart = dc.rowChart("#dc-l5lemma-chart"+lang);
-
-//  l5lemmachart dimensions (with a fake group to keep just top and bottom 15
-    var l5lemmaDimension = facts.dimension(function (d) { return d.l5lemma; });
-    var l5lemmaGroup = l5lemmaDimension.group().reduceCount(function (d) { return d.l5lemma; });
-
-var l5lemmaGroupTop = remove_empty_bins_key(l5lemmaGroup);
-//var l5lemmaGroupLow = remove_empty_bins_low(l5lemmaGroup);
-
-console.log("l5lemma groups :" + l5lemmaGroup.size());
-
-// l5lemma setup rowschart (TOP)
-    l5lemmaChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(l5lemmaDimension)
-            .group(l5lemmaGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-console.log("l5lemmas chart built");
-//console.log(l5lemmaChartLow);
-console.log(l5lemmaChart);
-
-
-
-
-
-/***************************** RIGHT CONTEXT 1 ROW BAR CHART ***********************/
-
-var r1lemmaChart = dc.rowChart("#dc-r1lemma-chart"+lang);
-
-//  r1lemmachart dimensions (with a fake group to keep just top and bottom 15
-    var r1lemmaDimension = facts.dimension(function (d) { return d.r1lemma; });
-    var r1lemmaGroup = r1lemmaDimension.group().reduceCount(function (d) { return d.r1lemma; });
-
-var r1lemmaGroupTop = remove_empty_bins_key(r1lemmaGroup);
-//var r1lemmaGroupLow = remove_empty_bins_low(r1lemmaGroup);
-
-console.log("r1lemma groups :" + r1lemmaGroup.size());
-
-// r1lemma setup rowschart (TOP)
-    r1lemmaChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(r1lemmaDimension)
-            .group(r1lemmaGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-console.log("r1lemmas chart built");
-console.log(r1lemmaChart);
-
-
-
-/***************************** RIGHT CONTEXT 2 ROW BAR CHART ***********************/
-
-var r2lemmaChart = dc.rowChart("#dc-r2lemma-chart"+lang);
-
-//  r2lemmachart dimensions (with a fake group to keep just top and bottom 15
-    var r2lemmaDimension = facts.dimension(function (d) { return d.r2lemma; });
-    var r2lemmaGroup = r2lemmaDimension.group().reduceCount(function (d) { return d.r2lemma; });
-
-var r2lemmaGroupTop = remove_empty_bins_key(r2lemmaGroup);
-//var r2lemmaGroupLow = remove_empty_bins_low(r2lemmaGroup);
-
-console.log("r2lemma groups :" + r2lemmaGroup.size());
-
-// r2lemma setup rowschart (TOP)
-    r2lemmaChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(r2lemmaDimension)
-            .group(r2lemmaGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-
-console.log("r2lemmas chart built");
-console.log(r2lemmaChart);
-
-
-
-/***************************** RIGHT CONTEXT 3 ROW BAR CHART ***********************/
-
-var r3lemmaChart = dc.rowChart("#dc-r3lemma-chart"+lang);
-
-//  r3lemmachart dimensions (with a fake group to keep just top and bottom 15
-    var r3lemmaDimension = facts.dimension(function (d) { return d.r3lemma; });
-    var r3lemmaGroup = r3lemmaDimension.group().reduceCount(function (d) { return d.r3lemma; });
-
-var r3lemmaGroupTop = remove_empty_bins_key(r3lemmaGroup);
-//var r3lemmaGroupLow = remove_empty_bins_low(r3lemmaGroup);
-
-console.log("r3lemma groups :" + r3lemmaGroup.size());
-
-// r3lemma setup rowschart (TOP)
-    r3lemmaChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(r3lemmaDimension)
-            .group(r3lemmaGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-
-console.log("r3lemmas chart built");
-console.log(r3lemmaChart);
-
-
-
-/***************************** RIGHT CONTEXT 4 ROW BAR CHART ***********************/
-
-var r4lemmaChart = dc.rowChart("#dc-r4lemma-chart"+lang);
-
-//  r4lemmachart dimensions (with a fake group to keep just top and bottom 15
-    var r4lemmaDimension = facts.dimension(function (d) { return d.r4lemma; });
-    var r4lemmaGroup = r4lemmaDimension.group().reduceCount(function (d) { return d.r4lemma; });
-
-var r4lemmaGroupTop = remove_empty_bins_key(r4lemmaGroup);
-//var r4lemmaGroupLow = remove_empty_bins_low(r4lemmaGroup);
-
-console.log("r4lemma groups :" + r4lemmaGroup.size());
-
-// r4lemma setup rowschart (TOP)
-    r4lemmaChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(r4lemmaDimension)
-            .group(r4lemmaGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-
-console.log("r4lemmas chart built");
-console.log(r4lemmaChart);
-
-
-
-/***************************** RIGHT CONTEXT 5 ROW BAR CHART ***********************/
-
-var r5lemmaChart = dc.rowChart("#dc-r5lemma-chart"+lang);
-
-//  r5lemmachart dimensions (with a fake group to keep just top and bottom 15
-    var r5lemmaDimension = facts.dimension(function (d) { return d.r5lemma; });
-    var r5lemmaGroup = r5lemmaDimension.group().reduceCount(function (d) { return d.r5lemma; });
-
-var r5lemmaGroupTop = remove_empty_bins_key(r5lemmaGroup);
-//var r5lemmaGroupLow = remove_empty_bins_low(r5lemmaGroup);
-
-console.log("r5lemma groups :" + r5lemmaGroup.size());
-
-// r5lemma setup rowschart (TOP)
-    r5lemmaChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(r5lemmaDimension)
-            .group(r5lemmaGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-
-console.log("r5lemmas chart built");
-console.log(r5lemmaChart);
-
-
-/// forme
-/***************************** LEFT CONTEXT 1 ROW BAR CHART ***********************/
-
-var l1formeChart = dc.rowChart("#dc-l1forme-chart"+lang);
-
-//  l1formechart dimensions (with a fake group to keep just top and bottom 15
-    var l1formeDimension = facts.dimension(function (d) { return d.l1forme; });
-    var l1formeGroup = l1formeDimension.group().reduceCount(function (d) { return d.l1forme; });
-
-
-
-var l1formeGroupTop = remove_empty_bins_key(l1formeGroup);
-//var l1formeGroupLow = remove_empty_bins_low(l1formeGroup);
-
-console.log("l1forme groups :" + l1formeGroup.size());
-
-// l1forme setup rowschart (TOP)
-    l1formeChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(l1formeDimension)
-            .group(l1formeGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-console.log("l1formes chart built");
-//console.log(l1formeChartLow);
-console.log(l1formeChart);
-
-
-
-/***************************** LEFT CONTEXT 2 ROW BAR CHART ***********************/
-
-var l2formeChart = dc.rowChart("#dc-l2forme-chart"+lang);
-
-//  l2formechart dimensions (with a fake group to keep just top and bottom 15
-    var l2formeDimension = facts.dimension(function (d) { return d.l2forme; });
-    var l2formeGroup = l2formeDimension.group().reduceCount(function (d) { return d.l2forme; });
-
-var l2formeGroupTop = remove_empty_bins_key(l2formeGroup);
-//var l2formeGroupLow = remove_empty_bins_low(l2formeGroup);
-
-console.log("l2forme groups :" + l2formeGroup.size());
-
-// l2forme setup rowschart (TOP)
-    l2formeChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(l2formeDimension)
-            .group(l2formeGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-
-console.log("l2formes chart built");
-//console.log(l2formeChartLow);
-console.log(l2formeChart);
-
-
-
-/***************************** LEFT CONTEXT 3 ROW BAR CHART ***********************/
-
-var l3formeChart = dc.rowChart("#dc-l3forme-chart"+lang);
-
-//  l3formechart dimensions (with a fake group to keep just top and bottom 15
-    var l3formeDimension = facts.dimension(function (d) { return d.l3forme; });
-    var l3formeGroup = l3formeDimension.group().reduceCount(function (d) { return d.l3forme; });
-
-var l3formeGroupTop = remove_empty_bins_key(l3formeGroup);
-//var l3formeGroupLow = remove_empty_bins_low(l3formeGroup);
-
-console.log("l3forme groups :" + l3formeGroup.size());
-
-// l3forme setup rowschart (TOP)
-    l3formeChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(l3formeDimension)
-            .group(l3formeGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-
-
-console.log("l3formes chart built");
-//console.log(l3formeChartLow);
-console.log(l3formeChart);
-
-
-/***************************** LEFT CONTEXT 4 ROW BAR CHART ***********************/
-
-var l4formeChart = dc.rowChart("#dc-l4forme-chart"+lang);
-
-//  l4formechart dimensions (with a fake group to keep just top and bottom 15
-    var l4formeDimension = facts.dimension(function (d) { return d.l4forme; });
-    var l4formeGroup = l4formeDimension.group().reduceCount(function (d) { return d.l4forme; });
-
-var l4formeGroupTop = remove_empty_bins_key(l4formeGroup);
-//var l4formeGroupLow = remove_empty_bins_low(l4formeGroup);
-
-console.log("l4forme groups :" + l4formeGroup.size());
-
-// l4forme setup rowschart (TOP)
-    l4formeChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(l4formeDimension)
-            .group(l4formeGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-console.log("l4formes chart built");
-//console.log(l4formeChartLow);
-console.log(l4formeChart);
-
-
-/***************************** LEFT CONTEXT 5 ROW BAR CHART ***********************/
-
-var l5formeChart = dc.rowChart("#dc-l5forme-chart"+lang);
-
-//  l5formechart dimensions (with a fake group to keep just top and bottom 15
-    var l5formeDimension = facts.dimension(function (d) { return d.l5forme; });
-    var l5formeGroup = l5formeDimension.group().reduceCount(function (d) { return d.l5forme; });
-
-var l5formeGroupTop = remove_empty_bins_key(l5formeGroup);
-//var l5formeGroupLow = remove_empty_bins_low(l5formeGroup);
-
-console.log("l5forme groups :" + l5formeGroup.size());
-
-// l5forme setup rowschart (TOP)
-    l5formeChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(l5formeDimension)
-            .group(l5formeGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-console.log("l5formes chart built");
-//console.log(l5formeChartLow);
-console.log(l5formeChart);
-
-
-
-
-
-/***************************** RIGHT CONTEXT 1 ROW BAR CHART ***********************/
-
-var r1formeChart = dc.rowChart("#dc-r1forme-chart"+lang);
-
-//  r1formechart dimensions (with a fake group to keep just top and bottom 15
-    var r1formeDimension = facts.dimension(function (d) { return d.r1forme; });
-    var r1formeGroup = r1formeDimension.group().reduceCount(function (d) { return d.r1forme; });
-
-var r1formeGroupTop = remove_empty_bins_key(r1formeGroup);
-//var r1formeGroupLow = remove_empty_bins_low(r1formeGroup);
-
-console.log("r1forme groups :" + r1formeGroup.size());
-
-// r1forme setup rowschart (TOP)
-    r1formeChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(r1formeDimension)
-            .group(r1formeGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-console.log("r1formes chart built");
-console.log(r1formeChart);
-
-
-
-/***************************** RIGHT CONTEXT 2 ROW BAR CHART ***********************/
-
-var r2formeChart = dc.rowChart("#dc-r2forme-chart"+lang);
-
-//  r2formechart dimensions (with a fake group to keep just top and bottom 15
-    var r2formeDimension = facts.dimension(function (d) { return d.r2forme; });
-    var r2formeGroup = r2formeDimension.group().reduceCount(function (d) { return d.r2forme; });
-
-var r2formeGroupTop = remove_empty_bins_key(r2formeGroup);
-//var r2formeGroupLow = remove_empty_bins_low(r2formeGroup);
-
-console.log("r2forme groups :" + r2formeGroup.size());
-
-// r2forme setup rowschart (TOP)
-    r2formeChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(r2formeDimension)
-            .group(r2formeGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-
-console.log("r2formes chart built");
-console.log(r2formeChart);
-
-
-
-/***************************** RIGHT CONTEXT 3 ROW BAR CHART ***********************/
-
-var r3formeChart = dc.rowChart("#dc-r3forme-chart"+lang);
-
-//  r3formechart dimensions (with a fake group to keep just top and bottom 15
-    var r3formeDimension = facts.dimension(function (d) { return d.r3forme; });
-    var r3formeGroup = r3formeDimension.group().reduceCount(function (d) { return d.r3forme; });
-
-var r3formeGroupTop = remove_empty_bins_key(r3formeGroup);
-//var r3formeGroupLow = remove_empty_bins_low(r3formeGroup);
-
-console.log("r3forme groups :" + r3formeGroup.size());
-
-// r3forme setup rowschart (TOP)
-    r3formeChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(r3formeDimension)
-            .group(r3formeGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-
-console.log("r3formes chart built");
-console.log(r3formeChart);
-
-
-
-/***************************** RIGHT CONTEXT 4 ROW BAR CHART ***********************/
-
-var r4formeChart = dc.rowChart("#dc-r4forme-chart"+lang);
-
-//  r4formechart dimensions (with a fake group to keep just top and bottom 15
-    var r4formeDimension = facts.dimension(function (d) { return d.r4forme; });
-    var r4formeGroup = r4formeDimension.group().reduceCount(function (d) { return d.r4forme; });
-
-var r4formeGroupTop = remove_empty_bins_key(r4formeGroup);
-//var r4formeGroupLow = remove_empty_bins_low(r4formeGroup);
-
-console.log("r4forme groups :" + r4formeGroup.size());
-
-// r4forme setup rowschart (TOP)
-    r4formeChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(r4formeDimension)
-            .group(r4formeGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-
-console.log("r4formes chart built");
-console.log(r4formeChart);
-
-
-
-/***************************** RIGHT CONTEXT 5 ROW BAR CHART ***********************/
-
-var r5formeChart = dc.rowChart("#dc-r5forme-chart"+lang);
-
-//  r5formechart dimensions (with a fake group to keep just top and bottom 15
-    var r5formeDimension = facts.dimension(function (d) { return d.r5forme; });
-    var r5formeGroup = r5formeDimension.group().reduceCount(function (d) { return d.r5forme; });
-
-var r5formeGroupTop = remove_empty_bins_key(r5formeGroup);
-//var r5formeGroupLow = remove_empty_bins_low(r5formeGroup);
-
-console.log("r5forme groups :" + r5formeGroup.size());
-
-// r5forme setup rowschart (TOP)
-    r5formeChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(r5formeDimension)
-            .group(r5formeGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-
-console.log("r5formes chart built");
-console.log(r5formeChart);
-
-
-
-
-
-/// pos
-
-/***************************** LEFT CONTEXT 1 ROW BAR CHART ***********************/
-
-var l1posChart = dc.rowChart("#dc-l1pos-chart"+lang);
-
-//  l1poschart dimensions (with a fake group to keep just top and bottom 15
-    var l1posDimension = facts.dimension(function (d) { return d.l1pos; });
-    var l1posGroup = l1posDimension.group().reduceCount(function (d) { return d.l1pos; });
-
-
-var l1posGroupTop = remove_empty_bins_key(l1posGroup);
-//var l1posGroupLow = remove_empty_bins_low(l1posGroup);
-
-console.log("l1pos groups :" + l1posGroup.size());
-
-// l1pos setup rowschart (TOP)
-    l1posChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(l1posDimension)
-            .group(l1posGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-console.log("l1poss chart built");
-//console.log(l1posChartLow);
-console.log(l1posChart);
-
-
-
-/***************************** LEFT CONTEXT 2 ROW BAR CHART ***********************/
-
-var l2posChart = dc.rowChart("#dc-l2pos-chart"+lang);
-
-//  l2poschart dimensions (with a fake group to keep just top and bottom 15
-    var l2posDimension = facts.dimension(function (d) { return d.l2pos; });
-    var l2posGroup = l2posDimension.group().reduceCount(function (d) { return d.l2pos; });
-
-var l2posGroupTop = remove_empty_bins_key(l2posGroup);
-//var l2posGroupLow = remove_empty_bins_low(l2posGroup);
-
-console.log("l2pos groups :" + l2posGroup.size());
-
-// l2pos setup rowschart (TOP)
-    l2posChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(l2posDimension)
-            .group(l2posGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-
-console.log("l2poss chart built");
-//console.log(l2posChartLow);
-console.log(l2posChart);
-
-
-
-/***************************** LEFT CONTEXT 3 ROW BAR CHART ***********************/
-
-var l3posChart = dc.rowChart("#dc-l3pos-chart"+lang);
-
-//  l3poschart dimensions (with a fake group to keep just top and bottom 15
-    var l3posDimension = facts.dimension(function (d) { return d.l3pos; });
-    var l3posGroup = l3posDimension.group().reduceCount(function (d) { return d.l3pos; });
-
-var l3posGroupTop = remove_empty_bins_key(l3posGroup);
-//var l3posGroupLow = remove_empty_bins_low(l3posGroup);
-
-console.log("l3pos groups :" + l3posGroup.size());
-
-// l3pos setup rowschart (TOP)
-    l3posChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(l3posDimension)
-            .group(l3posGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-
-
-console.log("l3poss chart built");
-//console.log(l3posChartLow);
-console.log(l3posChart);
-
-
-/***************************** LEFT CONTEXT 4 ROW BAR CHART ***********************/
-
-var l4posChart = dc.rowChart("#dc-l4pos-chart"+lang);
-
-//  l4poschart dimensions (with a fake group to keep just top and bottom 15
-    var l4posDimension = facts.dimension(function (d) { return d.l4pos; });
-    var l4posGroup = l4posDimension.group().reduceCount(function (d) { return d.l4pos; });
-
-var l4posGroupTop = remove_empty_bins_key(l4posGroup);
-//var l4posGroupLow = remove_empty_bins_low(l4posGroup);
-
-console.log("l4pos groups :" + l4posGroup.size());
-
-// l4pos setup rowschart (TOP)
-    l4posChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(l4posDimension)
-            .group(l4posGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-console.log("l4poss chart built");
-//console.log(l4posChartLow);
-console.log(l4posChart);
-
-
-/***************************** LEFT CONTEXT 5 ROW BAR CHART ***********************/
-
-var l5posChart = dc.rowChart("#dc-l5pos-chart"+lang);
-
-//  l5poschart dimensions (with a fake group to keep just top and bottom 15
-    var l5posDimension = facts.dimension(function (d) { return d.l5pos; });
-    var l5posGroup = l5posDimension.group().reduceCount(function (d) { return d.l5pos; });
-
-var l5posGroupTop = remove_empty_bins_key(l5posGroup);
-//var l5posGroupLow = remove_empty_bins_low(l5posGroup);
-
-console.log("l5pos groups :" + l5posGroup.size());
-
-// l5pos setup rowschart (TOP)
-    l5posChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(l5posDimension)
-            .group(l5posGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-console.log("l5poss chart built");
-//console.log(l5posChartLow);
-console.log(l5posChart);
-
-
-
-
-
-/***************************** RIGHT CONTEXT 1 ROW BAR CHART ***********************/
-
-var r1posChart = dc.rowChart("#dc-r1pos-chart"+lang);
-
-//  r1poschart dimensions (with a fake group to keep just top and bottom 15
-    var r1posDimension = facts.dimension(function (d) { return d.r1pos; });
-    var r1posGroup = r1posDimension.group().reduceCount(function (d) { return d.r1pos; });
-
-var r1posGroupTop = remove_empty_bins_key(r1posGroup);
-//var r1posGroupLow = remove_empty_bins_low(r1posGroup);
-
-console.log("r1pos groups :" + r1posGroup.size());
-
-// r1pos setup rowschart (TOP)
-    r1posChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(r1posDimension)
-            .group(r1posGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-console.log("r1poss chart built");
-console.log(r1posChart);
-
-
-
-/***************************** RIGHT CONTEXT 2 ROW BAR CHART ***********************/
-
-var r2posChart = dc.rowChart("#dc-r2pos-chart"+lang);
-
-//  r2poschart dimensions (with a fake group to keep just top and bottom 15
-    var r2posDimension = facts.dimension(function (d) { return d.r2pos; });
-    var r2posGroup = r2posDimension.group().reduceCount(function (d) { return d.r2pos; });
-
-var r2posGroupTop = remove_empty_bins_key(r2posGroup);
-//var r2posGroupLow = remove_empty_bins_low(r2posGroup);
-
-console.log("r2pos groups :" + r2posGroup.size());
-
-// r2pos setup rowschart (TOP)
-    r2posChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(r2posDimension)
-            .group(r2posGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-
-console.log("r2poss chart built");
-console.log(r2posChart);
-
-
-
-/***************************** RIGHT CONTEXT 3 ROW BAR CHART ***********************/
-
-var r3posChart = dc.rowChart("#dc-r3pos-chart"+lang);
-
-//  r3poschart dimensions (with a fake group to keep just top and bottom 15
-    var r3posDimension = facts.dimension(function (d) { return d.r3pos; });
-    var r3posGroup = r3posDimension.group().reduceCount(function (d) { return d.r3pos; });
-
-var r3posGroupTop = remove_empty_bins_key(r3posGroup);
-//var r3posGroupLow = remove_empty_bins_low(r3posGroup);
-
-console.log("r3pos groups :" + r3posGroup.size());
-
-// r3pos setup rowschart (TOP)
-    r3posChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(r3posDimension)
-            .group(r3posGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-
-console.log("r3poss chart built");
-console.log(r3posChart);
-
-
-
-/***************************** RIGHT CONTEXT 4 ROW BAR CHART ***********************/
-
-var r4posChart = dc.rowChart("#dc-r4pos-chart"+lang);
-
-//  r4poschart dimensions (with a fake group to keep just top and bottom 15
-    var r4posDimension = facts.dimension(function (d) { return d.r4pos; });
-    var r4posGroup = r4posDimension.group().reduceCount(function (d) { return d.r4pos; });
-
-var r4posGroupTop = remove_empty_bins_key(r4posGroup);
-//var r4posGroupLow = remove_empty_bins_low(r4posGroup);
-
-console.log("r4pos groups :" + r4posGroup.size());
-
-// r4pos setup rowschart (TOP)
-    r4posChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(r4posDimension)
-            .group(r4posGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-
-console.log("r4poss chart built");
-console.log(r4posChart);
-
-
-
-/***************************** RIGHT CONTEXT 5 ROW BAR CHART ***********************/
-
-var r5posChart = dc.rowChart("#dc-r5pos-chart"+lang);
-
-//  r5poschart dimensions (with a fake group to keep just top and bottom 15
-    var r5posDimension = facts.dimension(function (d) { return d.r5pos; });
-    var r5posGroup = r5posDimension.group().reduceCount(function (d) { return d.r5pos; });
-
-var r5posGroupTop = remove_empty_bins_key(r5posGroup);
-//var r5posGroupLow = remove_empty_bins_low(r5posGroup);
-
-console.log("r5pos groups :" + r5posGroup.size());
-
-// r5pos setup rowschart (TOP)
-    r5posChart
-    		.width(200)
-          .height(300)
-            .label(function(d){return d.key + ' (' + d.value + ')';})
-            .dimension(r5posDimension)
-            .group(r5posGroupTop)
-           .rowsCap(15)
-            .othersGrouper(false)
-            .renderLabel(true)
-    		.elasticX(true)
-    		.ordering(function (d) {
-    			return -d.value
-			})
-		    .turnOnControls(true)
-	        .controlsUseVisibility(true);
-
-
-console.log("r5poss chart built");
-console.log(r5posChart);
-
-/***************************** DATATABLES CHART ***********************/
-
-// sauvegarde version limitée datatables
-var dataTableDC = dc.dataTable("#dc-table-chart"+lang);
-
-  // Create dataTable dimension
-  var timeDimension = facts.dimension(function (d) {
-    return d.dtg;
-  });
-  
-  console.log("Dimensions created");
- //neolo = lexie.toString()
- //console.log(neolo)
-
-  /// render the datatable
-    dataTableDC
-//    .width(960).height(800)
-    .dimension(timeDimension)
-	.group(function(d) { return ""})
-	//.size(10)
-	.turnOnControls(true)
-    .controlsUseVisibility(true)
-    .columns([
-      function(d) { return d.date; },
-      function(d) { return '<a href=\"' + d.link + "\" target=\"_blank\">" +d.newspaper+"</a>";},
-      function(d) { return d.subject; },
-      function(d) { return get_text_from_neoveille(d);},
-    ])
-    .sortBy(function(d){ return d.dtg; })
-    .order(d3.descending);
-    //console.log(dataTableDC);
-
-console.log("Datatable chart built");
-console.log(timeDimension);
-
-/***************************** RENDER ALL THE CHARTS  ***********************/
-// Render the Charts
-dc.renderAll(); 
-
-}
-
-function get_text_from_neoveille(d){
-	res='...';
-	if (d.l10forme){res = res + d.l10forme +' ';}
-	if (d.l9forme){res = res + d.l9forme +' '; }
-	if (d.l8forme){res = res + d.l8forme +' '; }
-	if (d.l7forme){res = res + d.l7forme +' '; }
-	if (d.l6forme){res = res + d.l6forme +' '; }
-	if (d.l5forme){res = res + d.l5forme +' '; }
-	if (d.l4forme){res = res + d.l4forme +' '; }
-	if (d.l3forme){res = res + d.l3forme +' '; }
-	if (d.l2forme){res = res + d.l2forme +' '; }
-	if (d.l1forme){res = res + d.l1forme +' '; }
-	if (d.coreforme){res = res + "<span style='background-color: #ffa366'>" + d.coreforme +'</span> '; }
-	if (d.r1forme){res = res + d.r1forme +' '; }
-	if (d.r2forme){res = res + d.r2forme +' '; }
-	if (d.r3forme){res = res + d.r3forme +' '; }
-	if (d.r4forme){res = res + d.r4forme +' '; }
-	if (d.r5forme){res = res + d.r5forme +' '; }
-	if (d.r6forme){res = res + d.r6forme +' '; }
-	if (d.r7forme){res = res + d.r7forme +' '; }
-	if (d.r8forme){res = res + d.r8forme +' '; }
-	if (d.r9forme){res = res + d.r9forme +' '; }
-	if (d.r10forme){res = res + d.r10forme +' '; }
-	res2 = res.replace("\\",'');
-	return res2 + '...';
 
 }
 

@@ -129,7 +129,7 @@ width:100%;
 										<th></th>
 										<th></th>
 										<th></th>
-										<th></th>
+										<!--<th></th>-->
 									</tr>
 									<tr>
 										<th>Lexeme</th>
@@ -142,7 +142,7 @@ width:100%;
 										<th></th>
 										<th></th>
 										<th></th>
-										<th></th>
+										<!--<th></th>-->
 									</tr>
 								</thead>
                             </table>
@@ -152,50 +152,46 @@ width:100%;
 
             <!-- statistics pane for neologism details : contexts (neoveille)-->
            <div class="row row-example" id="neoResultsfr" style="display:none;overflow:scroll;">
-<!--<button type="button"  class="btn btn-light activated" id="fullscreen" onclick="activateFullscreen(document.getElementById('neoResultsfr'));dc.renderAll();" title="Full screen mode"><img src='./images/fullscreen.png' width='30px;float:right;'/></button>  -->
-<!-- main panel to toggle graphs display -->
-<!--  				<button id="res_newwindow" id_panel="neoResultsfr" style="align:right;">
-    				<i class="fa fa-external-link" aria-hidden="true"></i>
-  				</button>
--->
-<nav class="navbar navbar-expand-lg navbar-light bg-light" id="neoresultspanel"  style="padding-left:10px;">
 
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light" id="neoresultspanel"  style="padding-left:10px;">
 	<form class="form-inline">
 		  		<button class="btn btn-info" type="button" data-toggle="collapse" data-target="#timepanel" aria-expanded="false">
-    				Evolution temporelle
+    				Temporal evolution
   				</button>
   				<button class="btn btn-info" type="button" data-toggle="collapse" data-target="#neopospanel0" aria-expanded="false">
-    				Forme / Partie du discours
+    				Token / part of Speech
   				</button>
   				<button class="btn btn-info" type="button" data-toggle="collapse" data-target="#neopostimepanel" aria-expanded="false">
-    				Evolution Forme / Partie du discours
+    				Token / part of Speech evolution
   				</button>
   				<button class="btn btn-info" type="button" data-toggle="collapse" data-target="#languagepanel" aria-expanded="false">
-    				Langue
+    				Language
   				</button>
   				<button class="btn btn-info" type="button" data-toggle="collapse" data-target="#languagetimepanel" aria-expanded="false">
-    				Evolution Langue
+    				Language Evolution
   				</button>
   				<button class="btn btn-info" type="button" data-toggle="collapse" data-target="#countrypanel" aria-expanded="false">
-    				Pays
+    				Country
   				</button>
   				<button class="btn btn-info" type="button" data-toggle="collapse" data-target="#countrytimepanel" aria-expanded="false">
-    				Evolution Pays
+    				Country Evolution
   				</button>
   				<button class="btn btn-info" type="button" data-toggle="collapse" data-target="#journalpanel" aria-expanded="false">
     				Source
   				</button>
   				<button class="btn btn btn-info" type="button" data-toggle="collapse" data-target="#journaltimepanel" aria-expanded="false">
-    				Evolution Source
+    				Source Evolution
   				</button>
   				<button class="btn btn-info" type="button" data-toggle="collapse" data-target="#neoformpanel" aria-expanded="false">
-    				Forme
+    				Token
   				</button>
   				<button class="btn btn-info" type="button" data-toggle="collapse" data-target="#neolemmapanel" aria-expanded="false">
-    				Lemme
+    				Lemma
   				</button>
   				<button class="btn btn-info" type="button" data-toggle="collapse" data-target="#neopospanel" aria-expanded="false">
-    				Partie du discours
+    				Part of speech
   				</button>
 </form>
 </nav>
@@ -206,19 +202,19 @@ width:100%;
                                             <div class="panel panel-primary collapse in" id="timepanel">
                                                 <div class="panel-heading">
                                                 <a data-toggle="collapse" data-target="#toggletime">
-                                                	Evolution temporelle globale
+                                                	Global temporal evolution
                                                 </a>
                                                 </div>
                                                 <div class="panel-body collapse in" id="toggletime">
                                                 	<div class='dc-data-countfr'>
                                                 		<span class='filter-count'></span>
- 														 sur <span class='total-count'></span> articles.
+ 														 on <span class='total-count'></span> articles.
 													</div>
 		                                            <div id="dc-time-chartfr">
 		                                            </div>
 		                                            <div id="range-chartfr"></div>
           												<span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a>
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a>
 
                                                 </div>
                                             </div>
@@ -228,13 +224,13 @@ width:100%;
                                             <div class="panel panel-primary collapse in" id="neopospanel0">
                                                 <div class="panel-heading">
                                                 <a data-toggle="collapse" data-target="#togglepos">
-                                                	Répartition forme/pos
+                                                	Token/pos distribution
                                                 </a>
 												</div>
                                                 <div class="panel-body collapse in" id="togglepos">
 		                                            <div id="dc-neo-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>
 		                                            </div>
                                                 </div>
                                             </div>
@@ -244,14 +240,14 @@ width:100%;
                                             <div class="panel panel-primary collapse in" id="neopostimepanel">
                                                 <div class="panel-heading">
                                                 <a data-toggle="collapse" data-target="#togglecomptime">
-                                                	Evolution temporelle par forme/pos
+                                                	Token / Pos evolution
                                                 </a>
                                                 </div>
                                                 <div class="panel-body collapse in" id="togglecomptime">
-          											<span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               								<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a>   <br/>                                             
+          											<span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               								<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a>   <br/>                                             
 		                                            <div id="dc-comptime-chartfr"></div>
-		                                            <div id="range-chart2fr"></div>
+		                                            <!--<div id="range-chart2fr"></div>-->
                                                 </div>
                                             </div>
                                         </div>
@@ -260,12 +256,12 @@ width:100%;
                                             <div class="panel panel-primary collapse in" id="languagepanel">
                                                 <div class="panel-heading">
                                                 <a data-toggle="collapse" data-target="#toggledom">
-                                                	Répartition par langue
+                                                	Language distribution
                                                 </a>
                                                 </div>
                                                 <div class="panel-body collapse in" id="toggledom">
 		                                            <div id="dc-subject-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
 		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>		                                            
 		                                            </div>
                                                 </div>
@@ -276,14 +272,14 @@ width:100%;
                                             <div class="panel panel-primary collapse in" id="languagetimepanel">
                                                 <div class="panel-heading">
                                                 <a data-toggle="collapse" data-target="#togglecomptimedomain">
-                                                	Evolution temporelle par langue
+                                                	Language evolution
                                                 </a>
                                                 </div>
                                                 <div class="panel-body collapse in" id="togglecomptimedomain">
-          											<span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               								<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a>   <br/>                                             
+          											<span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               								<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a>   <br/>                                             
 		                                            <div id="dc-comptimedomain-chartfr"></div>
-		                                            <div id="range-chart3fr"></div>
+		                                            <!--<div id="range-chart3fr"></div>-->
                                                 </div>
                                             </div>
                                         </div>
@@ -293,13 +289,13 @@ width:100%;
                                             <div class="panel panel-primary collapse in" id="countrypanel">
                                                 <div class="panel-heading">
                                                 <a data-toggle="collapse" data-target="#togglecountry">
-                                                	Répartition par pays
+                                                	Country distribution
                                                 </a>
                                                 </div>
                                                 <div class="panel-body collapse in" id="togglecountry">
 		                                            <div id="dc-country-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>
                                                 </div>
                                             </div>
@@ -309,14 +305,14 @@ width:100%;
                                             <div class="panel panel-primary collapse in" id="countrytimepanel">
                                                 <div class="panel-heading">
                                                 <a data-toggle="collapse" data-target="#togglecompcountry">
-                                                	Evolution temporelle par pays
+                                                	Country evolution
                                                 </a>
                                                 </div>
                                                 <div class="panel-body collapse in" id="togglecompcountry">
-          											<span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               								<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a>   <br/>                                             
+          											<span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               								<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a>   <br/>                                             
 		                                            <div id="dc-comptimecountry-chartfr"></div>
-		                                            <div id="range-chart7fr"></div>
+		                                            <!--<div id="range-chart7fr"></div>-->
                                                 </div>
                                             </div>
                                         </div>
@@ -325,13 +321,13 @@ width:100%;
                                             <div class="panel panel-primary collapse in" id="journalpanel">
                                                 <div class="panel-heading">
                                                 <a data-toggle="collapse" data-target="#togglenewsp">
-                                                	Répartition par journaux
+                                                	Source distribution
                                                 </a>
                                                 </div>
                                                 <div class="panel-body collapse in" id="togglenewsp">
 		                                            <div id="dc-newspaper-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>
                                                 </div>
                                             </div>
@@ -341,14 +337,14 @@ width:100%;
                                             <div class="panel panel-primary collapse in" id="journaltimepanel">
                                                 <div class="panel-heading">
                                                 <a data-toggle="collapse" data-target="#togglecomptimenews">
-                                                	Evolution temporelle par journal
+                                                	Source evolution
                                                 </a>
                                                 </div>
                                                 <div class="panel-body collapse in" id="togglecomptimenews">
-          											<span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               								<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a>   <br/>                                             
+          											<span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               								<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a>   <br/>                                             
 		                                            <div id="dc-comptimenews-chartfr"></div>
-		                                            <div id="range-chart4fr"></div>
+		                                            <!--<div id="range-chart4fr"></div>-->
                                                 </div>
                                             </div>
                                         </div>
@@ -357,68 +353,54 @@ width:100%;
                                             <div class="panel panel-primary collapse in" id="neoformpanel">
                                                 <div class="panel-heading">
                                                 <a data-toggle="collapse" data-target="#toggleformeg3">
-                                                	Contexte (forme)
+                                                	Context (token)
                                                 </a>	
                                                 </div>
                                                 <div class="panel-body collapse in" style="margin: 0px;padding:0px" id="toggleformeg3">
                                                 <table>
                                                 <tr>
-<!--                                                	<td>
-		                                            <div id="dc-l4forme-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
-		                                            </div>
-		                                            </td>
--->		                                            
                                                 	<td>
 		                                            <div id="dc-l3forme-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>
 		                                            </td>
 		                                            <td>
 		                                            <div id="dc-l2forme-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>		                                            
 		                                            </td>
 		                                            <td>
 		                                            <div id="dc-l1forme-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>		                                            
 		                                            </td>
 		                                            <td>
 		                                            <div id="dc-coreforme-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>		                                            
 		                                            </td>              
 		                                            <td>
 		                                            <div id="dc-r1forme-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>
 		                                            </td>
 		                                            <td>
 		                                            <div id="dc-r2forme-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>		                                            
 		                                            </td>
 		                                            <td>
 		                                            <div id="dc-r3forme-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>		                                            
 		                                            </td>
-<!--		                                            <td>
-		                                            <div id="dc-r4forme-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
-		                                            </div>		                                            
-		                                            </td>
--->
 		                                        </tr>
 		                                        </table>
                                                 </div>
@@ -429,7 +411,7 @@ width:100%;
                                             <div class="panel panel-primary collapse in" id="neolemmapanel">
                                                 <div class="panel-heading">
                                                 <a data-toggle="collapse" data-target="#toggleg2">
-                                                	Contextes (lemmes)
+                                                	Contexts (lemmas)
                                                 </a>
                                                 </div>
                                                 
@@ -438,44 +420,44 @@ width:100%;
                                                 <tr>
                                                 	<td>
 		                                            <div id="dc-l3lemma-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>                                                	
                                                 	</td>
                                                 	<td>
 		                                            <div id="dc-l2lemma-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>
 		                                            </td>
 		                                            <td>
 		                                            <div id="dc-l1lemma-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>		                                            
 		                                            </td>
                                                 	<td>
 		                                            <div id="dc-corelemma-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>
 		                                            </td>
                                                 	<td>
 		                                            <div id="dc-r1lemma-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>
 		                                            </td>
 		                                            <td>
 		                                            <div id="dc-r2lemma-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>		                                            
 		                                            </td>
 		                                            <td>
 		                                            <div id="dc-r3lemma-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>		                                            
 		                                            </td>
 		                                        </tr>
@@ -488,7 +470,7 @@ width:100%;
                                             <div class="panel panel-primary collapse in" id="neopospanel">
                                                 <div class="panel-heading">
                                                 <a data-toggle="collapse" data-target="#toggleposg3">
-                                                	Contextes (POS)
+                                                	Contexts (POS)
                                                 </a>	
                                                 </div>
                                                 <div class="panel-body collapse in" style="margin: 0px;padding:0px" id="toggleposg3">
@@ -496,45 +478,45 @@ width:100%;
                                                 <tr>
                                                 	<td>
 		                                            <div id="dc-l3pos-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>
 		                                            </td>
 		                                            <td>
 		                                            <div id="dc-l2pos-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>		                                            
 		                                            </td>
 		                                            <td>
 		                                            <div id="dc-l1pos-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>		                                            
 		                                            </td>
 		                                            <td>
 		                                            <div id="dc-corepos-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>		                                            
 		                                            </td>
 		                                            
 		                                            <td>
 		                                            <div id="dc-r1pos-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>
 		                                            </td>
 		                                            <td>
 		                                            <div id="dc-r2pos-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>		                                            
 		                                            </td>
 		                                            <td>
 		                                            <div id="dc-r3pos-chartfr">
-          												<b><span class='reset' style='visibility: hidden;'>Filtre(s): <span class='filter'></span></span> 
-		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Réinitialiser</a></b>                                            
+          												<b><span class='reset' style='visibility: hidden;'>Filter(s): <span class='filter'></span></span> 
+		               									<a class='reset' href='javascript:dc.filterAll();dc.redrawAll();' style='visibility: hidden;'>Reset</a></b>                                            
 		                                            </div>		                                            
 		                                            </td>
 
@@ -549,26 +531,45 @@ width:100%;
                                         <!-- datatables -->
                                         <div class="col-sm-12">
                                             <div class="panel panel-primary">
-                                                <div class="panel-heading">Données</div>
+                                                <div class="panel-heading">Data</div>
                                                 <div class="panel-body">
-                                                	<div class='dc-data-count2fr'>
+												<!--<div="row">-->
+													<div class="col-sm-4">
+												    <div class='dc-data-count2fr'>
                                                 		<span class='filter-count'></span>
- 														 sur <span class='total-count'></span> occurrences.
+ 														 on <span class='total-count'></span> contexts.
 													</div>
-                                                <table class='table table-hover' id='dc-table-chartfr'>
+												</div>
+													<div class="col-sm-4">
+												<label>Show 
+												<select id="table_length">
+													<option value="10">10</option>
+													<option value="25" selected>25</option>
+													<option value="50">50</option>
+													<option value="100">100</option>
+												</select>
+												entries </label>
+												</div>
+													<div class="col-sm-4">
+        <label>Showing <span id="begin"></span>-<span id="end"></span> of <span id="size"></span> <span id="totalsize"></span></label>
+        <input id="previous" class="btn" type="Button" value="Previous" />
+        <input id="next" class="btn" type="button" value="Next"/>
+        										</div>
+												</div>
+                                                <table class='table table-hover table-bordered' id='dc-table-chartfr'>
+
                                                 	<thead>
                                                 	<tr class='header'>
-                                                		<th>Date</th>
-                                                		<th>Journal</th>
-                                                		<th>Domaine</th>
-                                                		<th>Extrait</th>
+                                                		<th id="dtg_sort">Date</th>
+                                                		<th id="lang_sort">Language</th>
+                                                		<th id="country_sort">Country</th>
+                                                		<th id="source_sort">Source</th>
+                                                		<th>Context</th>
                                                 	</tr></thead>
                                                 </table>
                                                 </div>
                                             </div>
                                         </div>
-
-		  		</div>
 
 
         </div>

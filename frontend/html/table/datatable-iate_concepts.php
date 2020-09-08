@@ -137,25 +137,6 @@ You can also filter and sort on every column, add, edit and delete concepts (not
         </div>
 <!--        <button lang="all" type="button" onclick="save_to_borrowings();" id="validateb" class="btn btn-warning" title="En cliquant, les emprunts de cette base seront copiés dans la base des lexies, pour l'étape de description">Valider les emprunts</button>-->
         <div class="description">
-          <!-- choix morphème -->
-          <!-- <h5>Choisissez une série : 
-			<select name="lang" id="lang" class="lang">
-				<option value="binge" selected>binge</option>
-				<option value="boost" >boost</option>
-				<option value="class-action" >class-action</option>
-				<option value="couch" >couch</option>
-				<option value="crowd" >crowd</option>
-				<option value="cyber" >cyber</option>
-				<option value="e-" >e-</option>
-				<option value="fake" >fake</option>
-				<option value="i-" >i-</option>
-				<option value="ing" >-ing</option>
-				<option value="m-" >m-</option>
-				<option value="street" >street</option>
-				<option value="tourist_tourism" >tourism/tourist</option>
-				<option value="troll" >troll</option>			
-    		</select>
-		  </h5> -->
             <!-- datatable -->             
             <div class="row">
             	<div class="col-xs-12">
@@ -197,7 +178,6 @@ You can also filter and sort on every column, add, edit and delete concepts (not
 
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light" id="neoresultspanel"  style="padding-left:10px;">
-
 	<form class="form-inline">
 		  		<button class="btn btn-info" type="button" data-toggle="collapse" data-target="#timepanel" aria-expanded="false">
     				Temporal evolution
@@ -575,14 +555,14 @@ You can also filter and sort on every column, add, edit and delete concepts (not
                                             <div class="panel panel-primary">
                                                 <div class="panel-heading">Data</div>
                                                 <div class="panel-body">
-												<div="row">
-												<div class="col-sm-4">
+												<!--<div="row">-->
+													<div class="col-sm-4">
 												    <div class='dc-data-count2fr'>
                                                 		<span class='filter-count'></span>
  														 on <span class='total-count'></span> contexts.
 													</div>
 												</div>
-												<div class="col-sm-4">
+													<div class="col-sm-4">
 												<label>Show 
 												<select id="table_length">
 													<option value="10">10</option>
@@ -592,7 +572,7 @@ You can also filter and sort on every column, add, edit and delete concepts (not
 												</select>
 												entries </label>
 												</div>
-												<div class="col-sm-4">
+													<div class="col-sm-4">
         <label>Showing <span id="begin"></span>-<span id="end"></span> of <span id="size"></span> <span id="totalsize"></span></label>
         <input id="previous" class="btn" type="Button" value="Previous" />
         <input id="next" class="btn" type="button" value="Next"/>
@@ -613,11 +593,11 @@ You can also filter and sort on every column, add, edit and delete concepts (not
                                             </div>
                                         </div>
 
-		  		</div>
+		</div>
 
         </div>
 
-</div>
+<!--</div>-->
 	
 		<!-- tab 2 - statistiques -->
 		<div role="tabpanel" class="tab-pane" id="stats">
