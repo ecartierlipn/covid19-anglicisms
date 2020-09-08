@@ -216,6 +216,14 @@ var tableNeo = $('#exampleNeo').DataTable( {
                 	render: function(){return '<image title="Search in Google" src="images/google2.png" style="cursor:pointer;"/>';}
             	},
 				{
+					// twitter search
+                	className:      'editorNeo_twitter',
+                	orderable:      false,
+                	data:           null,
+                	defaultContent: '',
+                	render: function(){return'<i title="Search in Twitter (experimental)" class="fa fa-twitter fa-lg" aria-hidden="true" style="color:#1525A8;cursor: pointer;"></i>';}
+            	},
+				{
 					// babelnet search
                 	className:      'editorNeo_babelnet',
                 	orderable:      false,
@@ -2971,7 +2979,7 @@ function get_word_profile(data, callback){
 // see also : //https://news.google.com/?output=rss&hl=fr&gl=fr&q=réseaux+sociaux&scoring=o&num=100
 $('#exampleNeo tbody').on('click', 'td.editorNeo_google', function () {
         var tr = $(this).closest('tr');
-        console.log(tr);
+        //console.log(tr);
         var row = tableNeo.row( tr );
         console.log(row.data());//row.data()
 		url2 = 'https://www.google.fr/search?hl=' + row.data().lexemes.lang + '&q="'  + row.data().lexemes.value +'"'
@@ -2983,7 +2991,7 @@ $('#exampleNeo tbody').on('click', 'td.editorNeo_google', function () {
 // https://babelnet.org/synset?word=m-marketing&lang=FR&details=1&orig=m-marketing
 $('#exampleNeo tbody').on('click', 'td.editorNeo_babelnet', function () {
         var tr = $(this).closest('tr');
-        console.log(tr);
+       // console.log(tr);
         var row = tableNeo.row( tr );
         console.log(tableNeo);//row.data()
         lang_map = {'1':'FR', '2':'PL','3':'CS'};
@@ -2992,8 +3000,18 @@ $('#exampleNeo tbody').on('click', 'td.editorNeo_babelnet', function () {
         window.open(encodeURI(url2),"_babelnet");
     } );
 
-} );
 
+$('#exampleNeo tbody').on('click', 'td.editorNeo_twitter', function () {
+        var tr = $(this).closest('tr');
+        //console.log(tr);
+        var row = tableNeo.row( tr );
+        console.log(row.data());
+        // https://twitter.com/search?q=lang%3Ade&src=typed_query
+		url2 = 'https://twitter.com/search?q="' + row.data().lexemes.value + '"&lang=' + row.data().lexemes.lang
+        window.open(encodeURI(url2),"_twitter");
+    } );
+
+} );
 
 //////////////   STATS FOR SPECIFIC NEOLOGISM 
 

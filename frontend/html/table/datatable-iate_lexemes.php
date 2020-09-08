@@ -129,7 +129,7 @@ width:100%;
 										<th></th>
 										<th></th>
 										<th></th>
-										<!--<th></th>-->
+										<th></th>
 									</tr>
 									<tr>
 										<th>Lexeme</th>
@@ -142,7 +142,7 @@ width:100%;
 										<th></th>
 										<th></th>
 										<th></th>
-										<!--<th></th>-->
+										<th></th>
 									</tr>
 								</thead>
                             </table>
