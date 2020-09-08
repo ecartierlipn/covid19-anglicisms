@@ -2974,11 +2974,7 @@ $('#exampleNeo tbody').on('click', 'td.editorNeo_google', function () {
         console.log(tr);
         var row = tableNeo.row( tr );
         console.log(row.data());//row.data()
-        //lang_map = {'1':'fr', '2':'pl','3':'cz'};
 		url2 = 'https://www.google.fr/search?hl=' + row.data().lexemes.lang + '&q="'  + row.data().lexemes.value +'"'
-//		url2 = 'https://www.google.fr/search?hl=' + lang_map[row.data().lexemes.lang] + '&q="'  + row.data().lexemes.value +'"'
-		//url = 'https://news.google.com/?output=rss&hl=fr&gl=fr&scoring=o&num=100&q=' + row.data().termes_copy.terme ;	
-		//url2 = 'https://books.google.com/ngrams/graph?case_insensitive=on&year_start=1800&year_end=2008&corpus=19&smoothing=3&content=' + row.data().termes_copy.terme;
         window.open(encodeURI(url2),"_google_details");
     } );
 
@@ -2991,7 +2987,8 @@ $('#exampleNeo tbody').on('click', 'td.editorNeo_babelnet', function () {
         var row = tableNeo.row( tr );
         console.log(tableNeo);//row.data()
         lang_map = {'1':'FR', '2':'PL','3':'CS'};
-		url2 = 'https://babelnet.org/synset?lang=' + lang_map[row.data().borrowings_description.language] + '&word='  + row.data().borrowings_description.word_lemma
+        // http://live.babelnet.org/synset?word=covid-19&lang=DA
+		url2 = 'http://live.babelnet.org/synset?lang=' + row.data().lexemes.lang.toUpperCase() + '&word='  + row.data().lexemes.value
         window.open(encodeURI(url2),"_babelnet");
     } );
 
