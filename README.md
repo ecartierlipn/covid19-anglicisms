@@ -5,7 +5,8 @@ This Github repository contains all data and programs enabling to explore lexeme
 
 The main lexical units are imported from the IATE database (https://data.europa.eu/euodp/en/data/dataset/covid-19-multilingual-terminology-on-iate), 28 July 2020 version (458 entries), then from every term we retrieve web-based news sites contexts from the JSI Timestamped monitor web corpora (https://www.sketchengine.eu/jozef-stefan-institute-newsfeed-corpus/) in nine languages (Czech, Dutch, English, Finnish, French, German, Italian, Spanish, Portuguese), parse them to study their features and features evolution through corpora (usage frequency from 2020/01/01, contextual profile, contexts metadata features : language, country, website) with the help of the Néoveille project frontend (http://www.neoveille.org).
 
-Programs are detailed in the ```backend``` and ```frontend``` subdirectories and documented in the respective ```readme.md``` files. We also provide data (IATE database in sqlite format, contexts from JSI for every concept - lexicalizations) for further studies. See ```backend/data```. You can browse the frontend platform here : https://tal.lipn.univ-paris13.fr/neoveille/html/covid19/html/index.php
+Programs are detailed in the ```backend``` and ```frontend``` subdirectories and documented in the respective ```readme.md``` files. We also provide data (IATE database in sqlite format, contexts from JSI for every concept - lexicalizations) for further studies. See ```backend/data```. You can browse the frontend platform here : https://tal.lipn.univ-paris13.fr/neoveille/html/covid19_project/html/index.php.
+You can also browse and explore corpus data and their aggregations here : https://tal.lipn.univ-paris13.fr/neoveille/html/covid19_project/html/data_exploration.php
 
 Analysis of the data is under way by linguists. Please check later for additional information.
 
